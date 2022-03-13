@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="jSearch.AppTest" time="0.028" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="jSearch.AppTest" time="0.031" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -11,7 +11,7 @@
     <property name="java.vm.specification.version" value="17"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="/home/mdema/.sdkman/candidates/java/17.0.1.12.1-amzn/lib"/>
-    <property name="sun.java.command" value="/home/mdema/school/cpsc304/project/jSearch/target/surefire/surefirebooter384355649307419536.jar /home/mdema/school/cpsc304/project/jSearch/target/surefire 2022-03-13T01-07-09_556-jvmRun1 surefire10760015831281848508tmp surefire_014000602128728934555tmp"/>
+    <property name="sun.java.command" value="/home/mdema/school/cpsc304/project/jSearch/target/surefire/surefirebooter4238983171159573897.jar /home/mdema/school/cpsc304/project/jSearch/target/surefire 2022-03-13T14-48-20_832-jvmRun1 surefire1860137359037891685tmp surefire_07219876719553048703tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/mdema/school/cpsc304/project/jSearch/target/test-classes:/home/mdema/school/cpsc304/project/jSearch/target/classes:/home/mdema/.m2/repository/junit/junit/4.11/junit-4.11.jar:/home/mdema/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/home/mdema/.m2/repository/org/postgresql/postgresql/42.3.3/postgresql-42.3.3.jar:/home/mdema/.m2/repository/org/checkerframework/checker-qual/3.5.0/checker-qual-3.5.0.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -26,7 +26,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="/home/mdema/school/cpsc304/project/jSearch/target/surefire/surefirebooter384355649307419536.jar"/>
+    <property name="surefire.real.class.path" value="/home/mdema/school/cpsc304/project/jSearch/target/surefire/surefirebooter4238983171159573897.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="17.0.1+12-LTS"/>
     <property name="user.name" value="mdema"/>
@@ -51,5 +51,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="shouldAnswerWithTrue" classname="jSearch.AppTest" time="0.001"/>
+  <testcase name="shouldAnswerWithTrue" classname="jSearch.AppTest" time="0.002"/>
 </testsuite>

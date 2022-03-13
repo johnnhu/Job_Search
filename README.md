@@ -40,6 +40,21 @@ The following tools are optional, but helpful.
 5. Run `setup.sql` (using IntelliJ, or via the command-line) to initialize the database
 6. Run the app via `App.java`
 
+### Troubleshooting
+
+Troubleshooting steps.
+
+#### PostgreSQL driver is unavailable; `Class.forName("org.postgresql.Driver");` throws an exception
+
+While you should be able to just run `mvn clean install`, this happened to me a few times. To fix it, I added the dependency through IntelliJ's interface.
+
+1. File > Project Structure
+2. Libraries
+3. Click the top "+" button
+4. Select "From Maven..."
+5. Search for "PostgreSQL"
+6. Select postgresql:9.2-1002.jdbc4, i.e., the latest version
+
 ## Usage
 
 TODO: list app features.
