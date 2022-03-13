@@ -13,6 +13,9 @@ public class App
         System.out.println( "Hello World!" );
 
         DatabaseConnectionHandler db = new DatabaseConnectionHandler();
+
+        db.deleteBranch(1);
+
         db.close();
     }
 }

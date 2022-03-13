@@ -2,6 +2,7 @@ package jSearch.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DatabaseConnectionHandler {
@@ -23,6 +24,7 @@ public class DatabaseConnectionHandler {
             Class.forName("org.postgresql.Driver");
             conn = DriverManager.getConnection(
                 POSTGRESQL_URL, POSTGRESQL_USER, POSTGRESQL_PASSWORD);
+            conn.setAutoCommit(false);
 
             if (conn != null) {
                 System.out.println("Connected to the database!");
@@ -47,4 +49,30 @@ public class DatabaseConnectionHandler {
         }
     }
 
+    public void deleteBranch(int branchId) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM branch WHERE branch_id = ?");
+            ps.setInt(1, branchId);
+
+            int rowCount = ps.executeUpdate();
+            if (rowCount == 0) {
+                System.out.println(WARNING_TAG + " Branch " + branchId + " does not exist!");
+            }
+
+            conn.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    private void rollbackConnection() {
+        try {
+            conn.rollback();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
 }
