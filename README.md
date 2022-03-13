@@ -40,6 +40,7 @@ The following tools are optional, but helpful.
    3. Then, run `make db_start` to begin the database in the background on `localhost`
    4. (Aside: there also exists `make db_stop` should you ever need to take the DB down!)
 5. Run `setup.sql` (using IntelliJ, or via the command-line) to initialize the database
+   1. The command `make db_bootstrap` encapsulates this for you!
 6. Run the app via `App.java`
 
 ### Troubleshooting
