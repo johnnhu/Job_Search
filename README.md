@@ -35,8 +35,10 @@ The following tools are optional, but helpful.
 2. Open the project using IntelliJ; this should auto-magically pick up on dependencies
 3. Run the test suite (under `/test`); ensure all tests are passing
 4. Begin the database
-   1. First, run `make init_db` to create the database cluster
-   2. Then, run `make run_db` to begin the database in the background on `localhost`
+   1. First, run `make db_init` to create the database cluster
+   2. Second, run `make db_user` to create a superuser named "postgres"
+   3. Then, run `make db_start` to begin the database in the background on `localhost`
+   4. (Aside: there also exists `make db_stop` should you ever need to take the DB down!)
 5. Run `setup.sql` (using IntelliJ, or via the command-line) to initialize the database
 6. Run the app via `App.java`
 
