@@ -1,4 +1,4 @@
-package models;
+package jSearch.models;
 
 public class HiringManager {
 }
