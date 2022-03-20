@@ -19,16 +19,24 @@ CREATE TABLE specialization_credits(
     PRIMARY KEY(major, is_honours, degree_type)
 );
 INSERT INTO specialization_credits(major, is_honours, degree_type, num_credits) VALUES ('Computer Science', True, 'BSc', 132);
+INSERT INTO specialization_credits(major, is_honours, degree_type, num_credits) VALUES ('Cellular, Anatomical, Physiological Sciences', True, 'BSc', 140);
+INSERT INTO specialization_credits(major, is_honours, degree_type, num_credits) VALUES ('Accounting', False, 'BCom', 120);
+INSERT INTO specialization_credits(major, is_honours, degree_type, num_credits) VALUES ('Psychology', False, 'BA', 110);
+INSERT INTO specialization_credits(major, is_honours, degree_type, num_credits) VALUES ('Integrated Engineering', False, 'BASc', 152);
 
 drop table if exists specialization_info CASCADE;
 CREATE TABLE specialization_info(
     spec_id UUID not null PRIMARY KEY,
     major varchar(60) not null,
-    minor varchar(60) not null,
+    minor varchar(60),
     is_honours boolean not null,
     degree_type varchar(60) not null
 );
 INSERT INTO specialization_info(spec_id, major, minor, is_honours, degree_type) VALUES ('9660b94a-9b49-11ec-b909-0242ac120002', 'Computer Science', 'Statistics', True, 'BSc');
+INSERT INTO specialization_info(spec_id, major, minor, is_honours, degree_type) VALUES ('830af072-9b49-11ec-b909-0242ac120002', 'Cellular, Anatomical, Physiological Sciences', null, True, 'BSc');
+INSERT INTO specialization_info(spec_id, major, minor, is_honours, degree_type) VALUES ('8704b546-9b49-11ec-b909-0242ac120002', 'Accounting', null, False, 'BCom');
+INSERT INTO specialization_info(spec_id, major, minor, is_honours, degree_type) VALUES ('8d955e4c-9b49-11ec-b909-0242ac120002', 'Psychology', 'Geography', False, 'BA');
+INSERT INTO specialization_info(spec_id, major, minor, is_honours, degree_type) VALUES ('914da9a4-9b49-11ec-b909-0242ac120002', 'Integrated Engineering', null, False, 'BASc');
 
 drop table if exists university CASCADE;
 CREATE TABLE university(
@@ -38,6 +46,10 @@ CREATE TABLE university(
     country varchar(60)
 );
 INSERT INTO university(university_name, region, year_established, country) VALUES ('University of British Columbia', 'British Columbia', 1908, 'Canada');
+INSERT INTO university(university_name, region, year_established, country) VALUES ('McMaster University', 'Ontario', 1887, 'Canada');
+INSERT INTO university(university_name, region, year_established, country) VALUES ('McGill University', 'Quebec', 1821, 'Canada');
+INSERT INTO university(university_name, region, year_established, country) VALUES ('University of Toronto', 'Ontario', 1827, 'Canada');
+INSERT INTO university(university_name, region, year_established, country) VALUES ('Queens University', 'Ontario', 1841, 'Canada');
 
 drop table if exists offers CASCADE;
 CREATE TABLE offers(
@@ -48,6 +60,10 @@ CREATE TABLE offers(
     FOREIGN KEY (spec_id) REFERENCES specialization_info
 );
 INSERT INTO offers(university_name, spec_id) VALUES ('University of British Columbia', '9660b94a-9b49-11ec-b909-0242ac120002');
+INSERT INTO offers(university_name, spec_id) VALUES ('McMaster University', '830af072-9b49-11ec-b909-0242ac120002');
+INSERT INTO offers(university_name, spec_id) VALUES ('McGill University', '8704b546-9b49-11ec-b909-0242ac120002');
+INSERT INTO offers(university_name, spec_id) VALUES ('University of Toronto', '8d955e4c-9b49-11ec-b909-0242ac120002');
+INSERT INTO offers(university_name, spec_id) VALUES ('Queens University', '914da9a4-9b49-11ec-b909-0242ac120002');
 
 drop table if exists coop_supervisor_works_at CASCADE;
 CREATE TABLE coop_supervisor_works_at(
@@ -56,11 +72,15 @@ CREATE TABLE coop_supervisor_works_at(
     supervisor_phone varchar(60) UNIQUE,
     supervisor_email varchar(60) UNIQUE,
     capacity integer,
-    worked_since date NOT NULL,
+    worked_since integer NOT NULL,
     university_name varchar(60) NOT NULL,
     FOREIGN KEY(university_name) REFERENCES university
 );
-INSERT INTO coop_supervisor_works_at(supervisor_id, supervisor_name, supervisor_phone, supervisor_email, capacity, worked_since, university_name) VALUES ('f05456ee-9b4b-11ec-b909-0242ac120002', 'Lexine Atrill', '604-822-9289', 'lexine.atrill@ubc.ca', 50, '2015-09-04', 'University of British Columbia');
+INSERT INTO coop_supervisor_works_at(supervisor_id, supervisor_name, supervisor_phone, supervisor_email, capacity, worked_since, university_name) VALUES ('f05456ee-9b4b-11ec-b909-0242ac120002', 'Lexine Atrill', '604-822-9289', 'lexine.atrill@ubc.ca', 50, 2015, 'University of British Columbia');
+INSERT INTO coop_supervisor_works_at(supervisor_id, supervisor_name, supervisor_phone, supervisor_email, capacity, worked_since, university_name) VALUES ('f3edf06c-9b4b-11ec-b909-0242ac120002', 'Sharon Craddock', '416-822-8087', 'sharon.craddock@mcmaster.ca', 30, 2019, 'McMaster University');
+INSERT INTO coop_supervisor_works_at(supervisor_id, supervisor_name, supervisor_phone, supervisor_email, capacity, worked_since, university_name) VALUES ('f72a636e-9b4b-11ec-b909-0242ac120002', 'Celine Francis', '514-324-5356', 'celine.francis@mcgill.ca', 25, 2017, 'McGill University');
+INSERT INTO coop_supervisor_works_at(supervisor_id, supervisor_name, supervisor_phone, supervisor_email, capacity, worked_since, university_name) VALUES ('fd86c144-9b4b-11ec-b909-0242ac120002', 'Emily Fuchs', '416-822-2481', 'emilyef@uoft.ca', 100, 2020, 'University of Toronto');
+INSERT INTO coop_supervisor_works_at(supervisor_id, supervisor_name, supervisor_phone, supervisor_email, capacity, worked_since, university_name) VALUES ('01d697ba-9b4c-11ec-b909-0242ac120002', 'Lara Hall', '613-543-6547', 'lara.hall@queens.ca', 42, 2011, 'Queens University');
 
 drop table if exists applicant CASCADE;
 CREATE TABLE applicant(
@@ -76,6 +96,10 @@ CREATE TABLE applicant(
     FOREIGN KEY(university_name) REFERENCES university
 );
 INSERT INTO applicant(applicant_id, applicant_name, applicant_phone, applicant_email, spec_id, supervisor_id, university_name) VALUES ('530ab1f6-9b4d-11ec-b909-0242ac120002', 'Michael DeMarco', '720-586-5172', 'michael.demarco@gmail.com', '9660b94a-9b49-11ec-b909-0242ac120002', 'f05456ee-9b4b-11ec-b909-0242ac120002', 'University of British Columbia');
+INSERT INTO applicant(applicant_id, applicant_name, applicant_phone, applicant_email, spec_id, supervisor_id, university_name) VALUES ('530ab732-9b4d-11ec-b909-0242ac120002', 'Emily Chen', '534-726-5725', 'emily.chen@gmail.com', '830af072-9b49-11ec-b909-0242ac120002', 'f3edf06c-9b4b-11ec-b909-0242ac120002', 'McMaster University');
+INSERT INTO applicant(applicant_id, applicant_name, applicant_phone, applicant_email, spec_id, supervisor_id, university_name) VALUES ('530ab8a4-9b4d-11ec-b909-0242ac120002', 'Jonathan Hu', '800-201-4779', 'jonathan.hu@hotmail.com', '8704b546-9b49-11ec-b909-0242ac120002', 'f72a636e-9b4b-11ec-b909-0242ac120002', 'McGill University');
+INSERT INTO applicant(applicant_id, applicant_name, applicant_phone, applicant_email, spec_id, supervisor_id, university_name) VALUES ('530abc64-9b4d-11ec-b909-0242ac120002', 'Hasan Altaf', '310-402-4648', 'hasan.altaf@yahoo.com', '8d955e4c-9b49-11ec-b909-0242ac120002', 'fd86c144-9b4b-11ec-b909-0242ac120002', 'University of Toronto');
+INSERT INTO applicant(applicant_id, applicant_name, applicant_phone, applicant_email, spec_id, supervisor_id, university_name) VALUES ('530abe12-9b4d-11ec-b909-0242ac120002', 'Annie Liu', '793-331-2507', 'annie.liu@gmail.com', '914da9a4-9b49-11ec-b909-0242ac120002', '01d697ba-9b4c-11ec-b909-0242ac120002', 'Queens University');
 
 drop table if exists job_position_belongs_to CASCADE;
 CREATE TABLE job_position_belongs_to(
@@ -85,7 +109,11 @@ CREATE TABLE job_position_belongs_to(
     company_id UUID NOT NULL,
     FOREIGN KEY (company_id) REFERENCES company
 );
-INSERT INTO job_position_belongs_to(position_id, position_title, is_filled, company_id) VALUES ('468516d2-9b4e-11ec-b909-0242ac120002', 'Software Engineer Intern', TRUE, '2f12f85e-9b51-11ec-b909-0242ac120002');
+INSERT INTO job_position_belongs_to(position_id, position_title, is_filled, company_id) VALUES ('468516d2-9b4e-11ec-b909-0242ac120002', 'Software Engineer Intern', True, '2f12f85e-9b51-11ec-b909-0242ac120002');
+INSERT INTO job_position_belongs_to(position_id, position_title, is_filled, company_id) VALUES ('46851a24-9b4e-11ec-b909-0242ac120002', 'PM Intern', True, '2f12fade-9b51-11ec-b909-0242ac120002');
+INSERT INTO job_position_belongs_to(position_id, position_title, is_filled, company_id) VALUES ('46851be6-9b4e-11ec-b909-0242ac120002', 'Data Science Intern', False, '2f12fc3c-9b51-11ec-b909-0242ac120002');
+INSERT INTO job_position_belongs_to(position_id, position_title, is_filled, company_id) VALUES ('46851d9e-9b4e-11ec-b909-0242ac120002', 'Engineering Intern', False, '2f12ff34-9b51-11ec-b909-0242ac120002');
+INSERT INTO job_position_belongs_to(position_id, position_title, is_filled, company_id) VALUES ('46851f56-9b4e-11ec-b909-0242ac120002', 'Healthcare Consulting Intern', False, '2f1301aa-9b51-11ec-b909-0242ac120002');
 
 drop type if exists status CASCADE;
 CREATE TYPE status AS ENUM ('Not Started', 'In Progress', 'Submitted', 'Offered Interview', 'Under Review', 'Offered Position', 'Rejected');
@@ -102,6 +130,10 @@ CREATE TABLE application_made(
     FOREIGN KEY(position_id) REFERENCES job_position_belongs_to
 );
 INSERT INTO application_made(application_id, status_description, resume_version, cover_letter_version, date_of_application, applicant_id, position_id) VALUES ('403925c0-9b4e-11ec-b909-0242ac120002', 'Not Started', 5, 1, '2022-01-03', '530ab1f6-9b4d-11ec-b909-0242ac120002', '468516d2-9b4e-11ec-b909-0242ac120002');
+INSERT INTO application_made(application_id, status_description, resume_version, cover_letter_version, date_of_application, applicant_id, position_id) VALUES ('40392886-9b4e-11ec-b909-0242ac120002', 'In Progress', 2, 5, '2021-04-04', '530ab732-9b4d-11ec-b909-0242ac120002', '46851a24-9b4e-11ec-b909-0242ac120002');
+INSERT INTO application_made(application_id, status_description, resume_version, cover_letter_version, date_of_application, applicant_id, position_id) VALUES ('403929d0-9b4e-11ec-b909-0242ac120002', 'Submitted', 1, 7, '2021-09-21', '530ab8a4-9b4d-11ec-b909-0242ac120002', '46851be6-9b4e-11ec-b909-0242ac120002');
+INSERT INTO application_made(application_id, status_description, resume_version, cover_letter_version, date_of_application, applicant_id, position_id) VALUES ('40392b06-9b4e-11ec-b909-0242ac120002', 'Offered Interview', 4, 3, '2021-11-04', '530abc64-9b4d-11ec-b909-0242ac120002', '46851d9e-9b4e-11ec-b909-0242ac120002');
+INSERT INTO application_made(application_id, status_description, resume_version, cover_letter_version, date_of_application, applicant_id, position_id) VALUES ('40392c32-9b4e-11ec-b909-0242ac120002', 'Rejected', 23, 1, '2022-02-02', '530abe12-9b4d-11ec-b909-0242ac120002', '46851f56-9b4e-11ec-b909-0242ac120002');
 
 drop table if exists attends CASCADE;
 CREATE TABLE attends(
@@ -114,6 +146,10 @@ CREATE TABLE attends(
     FOREIGN KEY(university_name) REFERENCES university
 );
 INSERT INTO attends(applicant_id, university_name, since_year, graduation_year) VALUES ('530ab1f6-9b4d-11ec-b909-0242ac120002', 'University of British Columbia', 2019, 2026);
+INSERT INTO attends(applicant_id, university_name, since_year, graduation_year) VALUES ('530ab732-9b4d-11ec-b909-0242ac120002', 'McMaster University', 2020, 2024);
+INSERT INTO attends(applicant_id, university_name, since_year, graduation_year) VALUES ('530ab8a4-9b4d-11ec-b909-0242ac120002', 'McGill University', 2021, 2023);
+INSERT INTO attends(applicant_id, university_name, since_year, graduation_year) VALUES ('530abc64-9b4d-11ec-b909-0242ac120002', 'University of Toronto', 2018, 2022);
+INSERT INTO attends(applicant_id, university_name, since_year, graduation_year) VALUES ('530abe12-9b4d-11ec-b909-0242ac120002', 'Queens University', 2017, 2025);
 
 drop table if exists lives_at_address CASCADE;
 CREATE TABLE lives_at_address(
@@ -127,6 +163,10 @@ CREATE TABLE lives_at_address(
     FOREIGN KEY (applicant_id) REFERENCES applicant ON DELETE CASCADE ON UPDATE CASCADE
 );
 INSERT INTO lives_at_address(street_address, city, postal_code, region, country, applicant_id) VALUES ('217 Shipley St.', 'Ottawa', 'T5A 6C8', 'Ontario', 'Canada', '530ab1f6-9b4d-11ec-b909-0242ac120002');
+INSERT INTO lives_at_address(street_address, city, postal_code, region, country, applicant_id) VALUES ('28 Cedarwood Ave. ', 'Toronto', 'E7L 5Y0', 'Ontario', 'Canada', '530ab732-9b4d-11ec-b909-0242ac120002');
+INSERT INTO lives_at_address(street_address, city, postal_code, region, country, applicant_id) VALUES ('6 Border Ave. ', 'Vancouver', 'A2N 4N7', 'British Columbia', 'Canada', '530ab8a4-9b4d-11ec-b909-0242ac120002');
+INSERT INTO lives_at_address(street_address, city, postal_code, region, country, applicant_id) VALUES ('7724 Bald Hill Ave.', 'Montreal', 'J6R 8B8', 'Quebec', 'Canada', '530abc64-9b4d-11ec-b909-0242ac120002');
+INSERT INTO lives_at_address(street_address, city, postal_code, region, country, applicant_id) VALUES ('412 E. Warren Ave. ', 'Kingston', 'E7A 3J3', 'Ontario', 'Canada', '530abe12-9b4d-11ec-b909-0242ac120002');
 
 drop table if exists job_position_compensation CASCADE;
 CREATE TABLE job_position_compensation(
@@ -138,6 +178,10 @@ CREATE TABLE job_position_compensation(
     FOREIGN KEY (company_id) REFERENCES company
 );
 INSERT INTO job_position_compensation(position_title, company_id, weekly_hours, salary) VALUES ('Software Engineer Intern', '2f12f85e-9b51-11ec-b909-0242ac120002', 40, 6000);
+INSERT INTO job_position_compensation(position_title, company_id, weekly_hours, salary) VALUES ('PM Intern', '2f12fade-9b51-11ec-b909-0242ac120002', 50, 5000);
+INSERT INTO job_position_compensation(position_title, company_id, weekly_hours, salary) VALUES ('Data Science Intern', '2f12fc3c-9b51-11ec-b909-0242ac120002', 80, 7500);
+INSERT INTO job_position_compensation(position_title, company_id, weekly_hours, salary) VALUES ('Engineering Intern', '2f12ff34-9b51-11ec-b909-0242ac120002', 60, 7000);
+INSERT INTO job_position_compensation(position_title, company_id, weekly_hours, salary) VALUES ('Healthcare Consulting Intern', '2f1301aa-9b51-11ec-b909-0242ac120002', 37, 4000);
 
 drop table if exists business_company CASCADE;
 CREATE TABLE business_company(
@@ -147,6 +191,10 @@ CREATE TABLE business_company(
     FOREIGN KEY (company_id) REFERENCES company
 );
 INSERT INTO business_company(company_id, field_of_business, deliverable) VALUES ('2f12f85e-9b51-11ec-b909-0242ac120002', 'marketing', 'marketing campaign');
+INSERT INTO business_company(company_id, field_of_business, deliverable) VALUES ('2f12fade-9b51-11ec-b909-0242ac120002', 'accounting', 'statement of income');
+INSERT INTO business_company(company_id, field_of_business, deliverable) VALUES ('2f12fc3c-9b51-11ec-b909-0242ac120002', 'consulting', 'healthcare consulting');
+INSERT INTO business_company(company_id, field_of_business, deliverable) VALUES ('2f12ff34-9b51-11ec-b909-0242ac120002', 'HR', 'hiring report');
+INSERT INTO business_company(company_id, field_of_business, deliverable) VALUES ('2f1301aa-9b51-11ec-b909-0242ac120002', 'finance', 'financial statements');
 
 drop table if exists technology_company CASCADE;
 CREATE TABLE technology_company(
@@ -155,7 +203,11 @@ CREATE TABLE technology_company(
     product varchar(60) NOT NULL,
     FOREIGN KEY (company_id) REFERENCES company
 );
-INSERT INTO technology_company(company_id, tech_stack, product) VALUES ('2f12ff34-9b51-11ec-b909-0242ac120002', 'assembly', 'cell phone');
+INSERT INTO technology_company(company_id, tech_stack, product) VALUES ('2f12f85e-9b51-11ec-b909-0242ac120002', 'assembly', 'cell phone');
+INSERT INTO technology_company(company_id, tech_stack, product) VALUES ('2f12fade-9b51-11ec-b909-0242ac120002', 'c++', 'search engine');
+INSERT INTO technology_company(company_id, tech_stack, product) VALUES ('2f12fc3c-9b51-11ec-b909-0242ac120002', 'python', 'microservice');
+INSERT INTO technology_company(company_id, tech_stack, product) VALUES ('2f12ff34-9b51-11ec-b909-0242ac120002', 'swift', 'mobile application');
+INSERT INTO technology_company(company_id, tech_stack, product) VALUES ('2f1301aa-9b51-11ec-b909-0242ac120002', 'javascript, html, css', 'web application');
 
 drop table if exists healthcare_company CASCADE;
 CREATE TABLE healthcare_company(
@@ -163,7 +215,11 @@ CREATE TABLE healthcare_company(
     specialty varchar(60) NOT NULL,
     FOREIGN KEY (company_id) REFERENCES company
 );
-INSERT INTO healthcare_company(company_id, specialty) VALUES ('2f1301aa-9b51-11ec-b909-0242ac120002', 'oncology');
+INSERT INTO healthcare_company(company_id, specialty) VALUES ('2f12f85e-9b51-11ec-b909-0242ac120002', 'oncology');
+INSERT INTO healthcare_company(company_id, specialty) VALUES ('2f12fade-9b51-11ec-b909-0242ac120002', 'pediatrics');
+INSERT INTO healthcare_company(company_id, specialty) VALUES ('2f12fc3c-9b51-11ec-b909-0242ac120002', 'dermatology');
+INSERT INTO healthcare_company(company_id, specialty) VALUES ('2f12ff34-9b51-11ec-b909-0242ac120002', 'dentistry');
+INSERT INTO healthcare_company(company_id, specialty) VALUES ('2f1301aa-9b51-11ec-b909-0242ac120002', 'medical imaging');
 
 drop table if exists prefers CASCADE;
 CREATE TABLE prefers(
@@ -174,6 +230,10 @@ CREATE TABLE prefers(
     FOREIGN KEY (university_name) REFERENCES university
 );
 INSERT INTO prefers(company_id, university_name) VALUES ('2f12f85e-9b51-11ec-b909-0242ac120002', 'University of British Columbia');
+INSERT INTO prefers(company_id, university_name) VALUES ('2f12fade-9b51-11ec-b909-0242ac120002', 'McMaster University');
+INSERT INTO prefers(company_id, university_name) VALUES ('2f12fc3c-9b51-11ec-b909-0242ac120002', 'McGill University');
+INSERT INTO prefers(company_id, university_name) VALUES ('2f12ff34-9b51-11ec-b909-0242ac120002', 'University of Toronto');
+INSERT INTO prefers(company_id, university_name) VALUES ('2f1301aa-9b51-11ec-b909-0242ac120002', 'Queens University');
 
 drop table if exists hiring_manager_works_for CASCADE;
 CREATE TABLE hiring_manager_works_for(
@@ -185,6 +245,10 @@ CREATE TABLE hiring_manager_works_for(
     FOREIGN KEY (company_id) REFERENCES company
 );
 INSERT INTO hiring_manager_works_for(emp_id, year_hired, first_name, last_name, company_id) VALUES ('f1cdb412-9b63-11ec-b909-0242ac120002', 2015, 'Meghan', 'Allen', '2f12f85e-9b51-11ec-b909-0242ac120002');
+INSERT INTO hiring_manager_works_for(emp_id, year_hired, first_name, last_name, company_id) VALUES ('f1cdb61a-9b63-11ec-b909-0242ac120002', 2019, 'Elisa', 'Baniassad', '2f12fade-9b51-11ec-b909-0242ac120002');
+INSERT INTO hiring_manager_works_for(emp_id, year_hired, first_name, last_name, company_id) VALUES ('f1cdb746-9b63-11ec-b909-0242ac120002', 2017, 'Patrice', 'Belleville', '2f12fc3c-9b51-11ec-b909-0242ac120002');
+INSERT INTO hiring_manager_works_for(emp_id, year_hired, first_name, last_name, company_id) VALUES ('f1cdb958-9b63-11ec-b909-0242ac120002', 2020, 'Ivan', 'Beschastnikh', '2f12ff34-9b51-11ec-b909-0242ac120002');
+INSERT INTO hiring_manager_works_for(emp_id, year_hired, first_name, last_name, company_id) VALUES ('f1cdbafc-9b63-11ec-b909-0242ac120002', 2011, 'William', 'Bowman', '2f1301aa-9b51-11ec-b909-0242ac120002');
 
 drop table if exists manages CASCADE;
 CREATE TABLE manages(
@@ -195,6 +259,10 @@ CREATE TABLE manages(
     FOREIGN KEY (emp_id) REFERENCES hiring_manager_works_for
 );
 INSERT INTO manages(position_id, emp_id) VALUES ('468516d2-9b4e-11ec-b909-0242ac120002', 'f1cdb412-9b63-11ec-b909-0242ac120002');
+INSERT INTO manages(position_id, emp_id) VALUES ('46851a24-9b4e-11ec-b909-0242ac120002', 'f1cdb61a-9b63-11ec-b909-0242ac120002');
+INSERT INTO manages(position_id, emp_id) VALUES ('46851be6-9b4e-11ec-b909-0242ac120002', 'f1cdb746-9b63-11ec-b909-0242ac120002');
+INSERT INTO manages(position_id, emp_id) VALUES ('46851d9e-9b4e-11ec-b909-0242ac120002', 'f1cdb958-9b63-11ec-b909-0242ac120002');
+INSERT INTO manages(position_id, emp_id) VALUES ('46851f56-9b4e-11ec-b909-0242ac120002', 'f1cdbafc-9b63-11ec-b909-0242ac120002');
 
 drop table if exists requires CASCADE;
 CREATE TABLE requires(
@@ -205,6 +273,10 @@ CREATE TABLE requires(
     FOREIGN KEY (position_id) REFERENCES job_position_belongs_to
 );
 INSERT INTO requires(spec_id, position_id) VALUES ('9660b94a-9b49-11ec-b909-0242ac120002', '468516d2-9b4e-11ec-b909-0242ac120002');
+INSERT INTO requires(spec_id, position_id) VALUES ('830af072-9b49-11ec-b909-0242ac120002', '46851a24-9b4e-11ec-b909-0242ac120002');
+INSERT INTO requires(spec_id, position_id) VALUES ('8704b546-9b49-11ec-b909-0242ac120002', '46851be6-9b4e-11ec-b909-0242ac120002');
+INSERT INTO requires(spec_id, position_id) VALUES ('8d955e4c-9b49-11ec-b909-0242ac120002', '46851d9e-9b4e-11ec-b909-0242ac120002');
+INSERT INTO requires(spec_id, position_id) VALUES ('914da9a4-9b49-11ec-b909-0242ac120002', '46851f56-9b4e-11ec-b909-0242ac120002');
 
 drop table if exists oversees CASCADE;
 CREATE TABLE oversees(
@@ -215,3 +287,7 @@ CREATE TABLE oversees(
     FOREIGN KEY (applicant_id) REFERENCES applicant
 );
 INSERT INTO oversees(emp_id, applicant_id) VALUES ('f1cdb412-9b63-11ec-b909-0242ac120002', '530ab1f6-9b4d-11ec-b909-0242ac120002');
+INSERT INTO oversees(emp_id, applicant_id) VALUES ('f1cdb61a-9b63-11ec-b909-0242ac120002', '530ab732-9b4d-11ec-b909-0242ac120002');
+INSERT INTO oversees(emp_id, applicant_id) VALUES ('f1cdb746-9b63-11ec-b909-0242ac120002', '530ab8a4-9b4d-11ec-b909-0242ac120002');
+INSERT INTO oversees(emp_id, applicant_id) VALUES ('f1cdb958-9b63-11ec-b909-0242ac120002', '530abc64-9b4d-11ec-b909-0242ac120002');
+INSERT INTO oversees(emp_id, applicant_id) VALUES ('f1cdbafc-9b63-11ec-b909-0242ac120002', '530abe12-9b4d-11ec-b909-0242ac120002');
