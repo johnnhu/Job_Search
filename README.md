@@ -58,6 +58,13 @@ While you should be able to just run `mvn clean install`, this happened to me a 
 5. Search for "PostgreSQL"
 6. Select postgresql:9.2-1002.jdbc4, i.e., the latest version
 
+## Running PostgreSQL and setting up the databases (on Mac)
+- `brew services start postgres` (or `brew services restart postgres` if the previous postgres process was never terminated)
+- `psql -U postgres -W`, then enter user password
+- `\dt` to view all tables
+- `\i src/main/java/jSearch/scripts/setup.sql;` to run the `setup.sql` file, to drop, create, and populate all tables. *Notices* can be ignored, but if there are *errors*, create the tables by following the next bullet point.
+- if there are any errors with the above command, run: (1) `DROP SCHEMA public CASCADE;` and then (2) `CREATE SCHEMA public;` to drop all tables and recreate them
+
 ## Usage
 
 TODO: list app features.
