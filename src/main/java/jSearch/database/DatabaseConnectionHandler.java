@@ -3,6 +3,7 @@ package jSearch.database;
 import jSearch.models.Applicant;
 import jSearch.models.JobPosition;
 import jSearch.models.SpecializationInfo;
+import javafx.util.Pair;
 import jdk.nashorn.internal.runtime.Specialization;
 
 import java.sql.*;
@@ -102,6 +103,29 @@ public class DatabaseConnectionHandler {
         }
 
         return result.toArray(new SpecializationInfo[result.size()]);
+    }
+
+    public Pair[] getNumberApplicantsPerJobPosition() {
+        ArrayList<Pair> result = new ArrayList<>();
+
+        try {
+            String query = "SELECT position_id, count(applicant_id) FROM application_made GROUP BY position_id";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Pair model = new Pair<String, Integer>(rs.getString("position_id"),
+                        rs.getInt("count"));
+                result.add(model);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new Pair[result.size()]);
     }
 
     private void rollbackConnection() {
