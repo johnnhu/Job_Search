@@ -19,8 +19,7 @@ public class SpecializationInfo {
         this.degree_type = degree_type;
     }
 
-    public SpecializationInfo(UUID spec_id, String major, String minor, boolean is_honours, String degree_type) {
-        this.spec_id = spec_id;
+    public SpecializationInfo(String major, String minor, boolean is_honours, String degree_type) {
         this.major = major;
         this.minor = minor;
         this.is_honours = is_honours;

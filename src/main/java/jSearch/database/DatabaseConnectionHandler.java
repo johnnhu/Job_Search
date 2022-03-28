@@ -1,9 +1,13 @@
 package jSearch.database;
 
+import jSearch.models.Applicant;
 import jSearch.models.JobPosition;
+import jSearch.models.SpecializationInfo;
+import jdk.nashorn.internal.runtime.Specialization;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class DatabaseConnectionHandler {
 
@@ -49,25 +53,6 @@ public class DatabaseConnectionHandler {
         }
     }
 
-//    public void deleteBranch(int branchId) {
-//        try {
-//            PreparedStatement ps = conn.prepareStatement("DELETE FROM branch WHERE branch_id = ?");
-//            ps.setInt(1, branchId);
-//
-//            int rowCount = ps.executeUpdate();
-//            if (rowCount == 0) {
-//                System.out.println(WARNING_TAG + " Branch " + branchId + " does not exist!");
-//            }
-//
-//            conn.commit();
-//
-//            ps.close();
-//        } catch (SQLException e) {
-//            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-//            rollbackConnection();
-//        }
-//    }
-
     public JobPosition[] getPositionsWithSalary(int minSalary) {
         ArrayList<JobPosition> result = new ArrayList<>();
 
@@ -91,6 +76,32 @@ public class DatabaseConnectionHandler {
         }
 
         return result.toArray(new JobPosition[result.size()]);
+    }
+    public SpecializationInfo[] getSpecializationFromApplicant(String applicant_email) {
+        ArrayList<SpecializationInfo> result = new ArrayList<>();
+
+        try {
+            String query = "SELECT major, minor, is_honours, degree_type FROM specialization_info, applicant " +
+                    "WHERE applicant.applicant_email = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, applicant_email);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                SpecializationInfo model = new SpecializationInfo(rs.getString("major"),
+                        rs.getString("minor"),
+                        rs.getBoolean("is_honours"),
+                        rs.getString("degree_type"));
+                result.add(model);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new SpecializationInfo[result.size()]);
     }
 
     private void rollbackConnection() {
