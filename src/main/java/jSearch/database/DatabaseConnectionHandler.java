@@ -1,9 +1,9 @@
 package jSearch.database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import jSearch.models.JobPosition;
+
+import java.sql.*;
+import java.util.ArrayList;
 
 public class DatabaseConnectionHandler {
 
@@ -23,7 +23,7 @@ public class DatabaseConnectionHandler {
         try {
             Class.forName("org.postgresql.Driver");
             conn = DriverManager.getConnection(
-                POSTGRESQL_URL, POSTGRESQL_USER, POSTGRESQL_PASSWORD);
+                    POSTGRESQL_URL, POSTGRESQL_USER, POSTGRESQL_PASSWORD);
             conn.setAutoCommit(false);
 
             if (conn != null) {
@@ -49,23 +49,48 @@ public class DatabaseConnectionHandler {
         }
     }
 
-    public void deleteBranch(int branchId) {
-        try {
-            PreparedStatement ps = conn.prepareStatement("DELETE FROM branch WHERE branch_id = ?");
-            ps.setInt(1, branchId);
+//    public void deleteBranch(int branchId) {
+//        try {
+//            PreparedStatement ps = conn.prepareStatement("DELETE FROM branch WHERE branch_id = ?");
+//            ps.setInt(1, branchId);
+//
+//            int rowCount = ps.executeUpdate();
+//            if (rowCount == 0) {
+//                System.out.println(WARNING_TAG + " Branch " + branchId + " does not exist!");
+//            }
+//
+//            conn.commit();
+//
+//            ps.close();
+//        } catch (SQLException e) {
+//            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+//            rollbackConnection();
+//        }
+//    }
 
-            int rowCount = ps.executeUpdate();
-            if (rowCount == 0) {
-                System.out.println(WARNING_TAG + " Branch " + branchId + " does not exist!");
+    public JobPosition[] getPositionsWithSalary(int minSalary) {
+        ArrayList<JobPosition> result = new ArrayList<>();
+
+        try {
+            String query = "SELECT company_id, position_title, salary FROM job_position_compensation WHERE salary > ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, minSalary);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                JobPosition model = new JobPosition(rs.getString("company_id"),
+                        rs.getString("position_title"),
+                        rs.getInt("salary"));
+                result.add(model);
             }
 
-            conn.commit();
-
+            rs.close();
             ps.close();
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-            rollbackConnection();
         }
+
+        return result.toArray(new JobPosition[result.size()]);
     }
 
     private void rollbackConnection() {
