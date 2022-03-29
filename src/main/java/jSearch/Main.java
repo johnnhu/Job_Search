@@ -13,7 +13,7 @@ public class Main {
 
     private static int testDb() {
         DatabaseConnectionHandler db = new DatabaseConnectionHandler();
-        db.deleteBranch(1);
+//        db.deleteBranch(1);
         db.close();
 
         return 0;
