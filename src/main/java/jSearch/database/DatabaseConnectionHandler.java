@@ -1,14 +1,10 @@
 package jSearch.database;
 
-import jSearch.models.Applicant;
 import jSearch.models.JobPosition;
 import jSearch.models.SpecializationInfo;
 import javafx.util.Pair;
-import jdk.nashorn.internal.runtime.Specialization;
-
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class DatabaseConnectionHandler {
 
