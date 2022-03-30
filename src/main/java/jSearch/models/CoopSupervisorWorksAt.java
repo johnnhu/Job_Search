@@ -2,18 +2,22 @@ package jSearch.models;
 
 import java.util.UUID;
 
-public class CoopSupervisor {
+public class CoopSupervisorWorksAt {
     UUID supervisor_id;
     String supervisor_name;
     String supervisor_phone;
     String supervisor_email;
     int capacity;
+    int worked_since;
+    String university_name;
 
-    public CoopSupervisor(UUID supervisor_id, String supervisor_name, String supervisor_phone, String supervisor_email, int capacity) {
+    public CoopSupervisorWorksAt(UUID supervisor_id, String supervisor_name, String supervisor_phone, String supervisor_email, int capacity, int worked_since, String university_name) {
         this.supervisor_id = supervisor_id;
         this.supervisor_name = supervisor_name;
         this.supervisor_phone = supervisor_phone;
         this.supervisor_email = supervisor_email;
         this.capacity = capacity;
+        this.worked_since = worked_since;
+        this.university_name = university_name;
     }
 }
