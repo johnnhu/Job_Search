@@ -80,6 +80,157 @@ public class DatabaseConnectionHandler {
 
         return result.toArray(new JobPositionCompensation[result.size()]);
     }
+
+
+    // PROJECTION QUERY
+    public Applicant[] getFieldFromApplicant(String columnName) {
+        switch(columnName) {
+            case "applicant_id":
+                getApplicantIDFromApplicant();
+            case "applicant_name":
+                getApplicantNameFromApplicant();
+            case "applicant_phone":
+                getApplicantPhoneFromApplicant();
+            case "applicant_email":
+                getApplicantEmailFromApplicant();
+            case "spec_id":
+                getSpecIDFromApplicant();
+            case "supervisor_id":
+                getSupervisorIDFromApplicant();
+            case "university_name":
+                getUniversityNameFromApplicant();
+        }
+
+    }
+
+    public UUID[] getApplicantIDFromApplicant() {
+        ArrayList<UUID> result = new ArrayList<>();
+        try {
+            String query = "SELECT applicant_id FROM applicant";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                UUID applicant_id = rs.getObject("applicant_id", java.util.UUID.class);
+                result.add(applicant_id);
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return result.toArray(new UUID[result.size()]);
+    }
+
+    public String[] getApplicantNameFromApplicant() {
+        ArrayList<String> result = new ArrayList<>();
+        try {
+            String query = "SELECT applicant_name FROM applicant";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String applicant_name = rs.getString("applicant_name");
+                result.add(applicant_name);
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return result.toArray(new String[result.size()]);
+    }
+
+    public String[] getApplicantPhoneFromApplicant() {
+        ArrayList<String> result = new ArrayList<>();
+        try {
+            String query = "SELECT applicant_phone FROM applicant";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String applicant_phone = rs.getString("applicant_phone");
+                result.add(applicant_phone);
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return result.toArray(new String[result.size()]);
+    }
+
+    public String[] getApplicantEmailFromApplicant() {
+        ArrayList<String> result = new ArrayList<>();
+        try {
+            String query = "SELECT applicant_email FROM applicant";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String applicant_email = rs.getString("applicant_email");
+                result.add(applicant_email);
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return result.toArray(new String[result.size()]);
+    }
+
+    public UUID[] getSpecIDFromApplicant() {
+        ArrayList<UUID> result = new ArrayList<>();
+        try {
+            String query = "SELECT spec_id FROM applicant";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                UUID spec_id = rs.getObject("spec_id", java.util.UUID.class);
+                result.add(spec_id);
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return result.toArray(new UUID[result.size()]);
+    }
+
+    public UUID[] getSupervisorIDFromApplicant() {
+        ArrayList<UUID> result = new ArrayList<>();
+        try {
+            String query = "SELECT supervisor_id FROM applicant";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                UUID supervisor_id = rs.getObject("supervisor_id", java.util.UUID.class);
+                result.add(supervisor_id);
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return result.toArray(new UUID[result.size()]);
+    }
+
+    public String[] getUniversityNameFromApplicant() {
+        ArrayList<String> result = new ArrayList<>();
+        try {
+            String query = "SELECT university_name FROM applicant";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String university_name = rs.getString("university_name");
+                result.add(university_name);
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return result.toArray(new String[result.size()]);
+    }
+
+
+    // JOIN QUERY
     public SpecializationInfo[] getSpecializationFromApplicant(String applicant_email) {
         ArrayList<SpecializationInfo> result = new ArrayList<>();
 
@@ -107,6 +258,31 @@ public class DatabaseConnectionHandler {
         return result.toArray(new SpecializationInfo[result.size()]);
     }
 
+
+    // AGGREGATION QUERY
+    public Pair[] getNumberApplicantsPerUniversity() {
+        ArrayList<Pair> result = new ArrayList<>();
+
+        try {
+            String query = "SELECT university_name, COUNT(*) FROM attends GROUP BY university_name";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Pair model = new Pair<String, Integer>(rs.getString("university_name"),
+                        rs.getInt("count"));
+                result.add(model);
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return result.toArray(new Pair[result.size()]);
+    }
+
+
+    // NESTED AGGREGATION WITH GROUP BY QUERY
     public Pair[] getNumberApplicantsPerJobPosition() {
         ArrayList<Pair> result = new ArrayList<>();
 
