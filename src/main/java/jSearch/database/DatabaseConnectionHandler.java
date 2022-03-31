@@ -7,6 +7,7 @@ import jSearch.models.SpecializationInfo;
 import javafx.util.Pair;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class DatabaseConnectionHandler {
 
@@ -305,6 +306,26 @@ public class DatabaseConnectionHandler {
         }
 
         return result.toArray(new Pair[result.size()]);
+    }
+
+
+    // DIVISION QUERY
+    public String[] getJobPositionsAllApplicantsAppliedTo() {
+        ArrayList<String> result = new ArrayList<>();
+        try {
+            String query = "SELECT position_title FROM job_position_belongs_to J WHERE NOT EXISTS ((SELECT A.applicant_id FROM Applicant A) EXCEPT (SELECT AM.applicant_id FROM Application_MADE AM WHERE AM.position_id = J.position_id))";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String position_title = rs.getString("position_title");
+                result.add(position_title);
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return result.toArray(new String[result.size()]);
     }
 
     private void rollbackConnection() {
