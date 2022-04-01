@@ -7,6 +7,7 @@ import jSearch.models.SpecializationInfo;
 import javafx.util.Pair;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class DatabaseConnectionHandler {
 

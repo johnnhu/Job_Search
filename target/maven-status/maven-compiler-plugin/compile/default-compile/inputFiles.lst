@@ -2,6 +2,10 @@
 /Users/johnhbuckets/jSearch/src/main/java/jSearch/models/companies/BusinessCompany.java
 /Users/johnhbuckets/jSearch/src/main/java/jSearch/models/HiringManager.java
 /Users/johnhbuckets/jSearch/src/main/java/jSearch/models/companies/HealthcareCompany.java
+/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/CoopSupervisorWorksAt.java
+/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/JobPositionCompensation.java
+/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/Attends.java
+/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/ApplicationMade.java
 /Users/johnhbuckets/jSearch/src/main/java/jSearch/models/companies/TechCompany.java
 /Users/johnhbuckets/jSearch/src/main/java/jSearch/models/SpecializationInfo.java
 /Users/johnhbuckets/jSearch/src/main/java/jSearch/models/Application_made.java
@@ -10,6 +14,7 @@
 /Users/johnhbuckets/jSearch/src/main/java/jSearch/models/University.java
 /Users/johnhbuckets/jSearch/src/main/java/jSearch/Main.java
 /Users/johnhbuckets/jSearch/src/main/java/jSearch/models/Company.java
-/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/JobPosition.java
+/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/JobPositionBelongsTo.java
+/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/Offers.java
 /Users/johnhbuckets/jSearch/src/main/java/jSearch/models/Address.java
-/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/CoopSupervisor.java
+/Users/johnhbuckets/jSearch/src/main/java/jSearch/JsonTransformer.java
