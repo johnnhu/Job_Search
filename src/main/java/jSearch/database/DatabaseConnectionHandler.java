@@ -83,23 +83,32 @@ public class DatabaseConnectionHandler {
     // PROJECTION QUERY
     public Object[] getFieldFromApplicant(String columnName) {
         Object[] result;
-        switch(columnName) {
+
+        switch (columnName) {
             case "applicant_id":
                 result = getApplicantIDFromApplicant();
+                break;
             case "applicant_name":
                 result = getApplicantNameFromApplicant();
+                break;
             case "applicant_phone":
                 result = getApplicantPhoneFromApplicant();
+                break;
             case "applicant_email":
                 result = getApplicantEmailFromApplicant();
+                break;
             case "spec_id":
                 result = getSpecIDFromApplicant();
+                break;
             case "supervisor_id":
                 result = getSupervisorIDFromApplicant();
+                break;
             case "university_name":
                 result = getUniversityNameFromApplicant();
+                break;
             default:
-                result = new Object[]{"Invalid column name."};
+                result = new Object[]{columnName + " is an invalid column name."};
+                break;
         }
 
         return result;
