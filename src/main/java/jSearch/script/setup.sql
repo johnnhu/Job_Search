@@ -135,6 +135,13 @@ INSERT INTO application_made(application_id, status_description, resume_version,
 INSERT INTO application_made(application_id, status_description, resume_version, cover_letter_version, date_of_application, applicant_id, position_id) VALUES ('40392b06-9b4e-11ec-b909-0242ac120002', 'Offered Interview', 4, 3, '2021-11-04', '530abc64-9b4d-11ec-b909-0242ac120002', '46851d9e-9b4e-11ec-b909-0242ac120002');
 INSERT INTO application_made(application_id, status_description, resume_version, cover_letter_version, date_of_application, applicant_id, position_id) VALUES ('40392c32-9b4e-11ec-b909-0242ac120002', 'Rejected', 23, 1, '2022-02-02', '530abe12-9b4d-11ec-b909-0242ac120002', '46851f56-9b4e-11ec-b909-0242ac120002');
 
+-- INSERTS FOR DIVISION QUERY (have 1 job position (id: 468516d2-9b4e-11ec-b909-0242ac120002) that every applicant applied to):
+INSERT INTO application_made(application_id, status_description, resume_version, cover_letter_version, date_of_application, applicant_id, position_id) VALUES ('5a6dc83e-b0a1-11ec-b909-0242ac120002', 'Not Started', 5, 1, '2022-01-03', '530ab732-9b4d-11ec-b909-0242ac120002', '468516d2-9b4e-11ec-b909-0242ac120002');
+INSERT INTO application_made(application_id, status_description, resume_version, cover_letter_version, date_of_application, applicant_id, position_id) VALUES ('5a6dcd2a-b0a1-11ec-b909-0242ac120002', 'Not Started', 5, 1, '2022-01-03', '530ab8a4-9b4d-11ec-b909-0242ac120002', '468516d2-9b4e-11ec-b909-0242ac120002');
+INSERT INTO application_made(application_id, status_description, resume_version, cover_letter_version, date_of_application, applicant_id, position_id) VALUES ('5a6dd324-b0a1-11ec-b909-0242ac120002', 'Not Started', 5, 1, '2022-01-03', '530abc64-9b4d-11ec-b909-0242ac120002', '468516d2-9b4e-11ec-b909-0242ac120002');
+INSERT INTO application_made(application_id, status_description, resume_version, cover_letter_version, date_of_application, applicant_id, position_id) VALUES ('5a6dd496-b0a1-11ec-b909-0242ac120002', 'Not Started', 5, 1, '2022-01-03', '530abe12-9b4d-11ec-b909-0242ac120002', '468516d2-9b4e-11ec-b909-0242ac120002');
+
+
 drop table if exists attends CASCADE;
 CREATE TABLE attends(
     applicant_id UUID,

@@ -65,6 +65,10 @@ While you should be able to just run `mvn clean install`, this happened to me a 
 - `\i src/main/java/jSearch/scripts/setup.sql;` to run the `setup.sql` file, to drop, create, and populate all tables. *Notices* can be ignored, but if there are *errors*, create the tables by following the next bullet point.
 - if there are any errors with the above command, run: (1) `DROP SCHEMA public CASCADE;` and then (2) `CREATE SCHEMA public;` to drop all tables and recreate them
 
+
+## Troubleshooting (on Mac)
+- if you run into this error: `psql: could not connect to server: No such file or directory. Is the server running locally and accepting connections on Unix domain socket "/tmp/.s.PGSQL.5432"`, the solution is to remove this file with this command: `rm /usr/local/var/postgres/postmaster.pid`
+
 ## Usage
 
 TODO: list app features.

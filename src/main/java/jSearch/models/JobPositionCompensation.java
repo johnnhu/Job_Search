@@ -20,4 +20,9 @@ public class JobPositionCompensation {
         this.position_title = position_title;
         this.salary = salary;
     }
+
+    public JobPositionCompensation(String position_title, int salary) {
+        this.position_title = position_title;
+        this.salary = salary;
+    }
 }

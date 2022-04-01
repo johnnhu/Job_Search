@@ -7,6 +7,7 @@ import jSearch.models.SpecializationInfo;
 import javafx.util.Pair;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class DatabaseConnectionHandler {
 
@@ -63,8 +64,8 @@ public class DatabaseConnectionHandler {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                JobPositionCompensation model = new JobPositionCompensation(rs.getObject("company_id", java.util.UUID.class),
-                    rs.getString("position_title"),
+                JobPositionCompensation model = new JobPositionCompensation((java.util.UUID) rs.getObject("company_id"),
+                        rs.getString("position_title"),
                     rs.getInt("salary"));
                 result.add(model);
             }
@@ -111,7 +112,7 @@ public class DatabaseConnectionHandler {
             PreparedStatement ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                UUID applicant_id = rs.getObject("applicant_id", java.util.UUID.class);
+                UUID applicant_id = (java.util.UUID) rs.getObject("applicant_id");
                 result.add(applicant_id);
             }
             rs.close();
@@ -183,7 +184,7 @@ public class DatabaseConnectionHandler {
             PreparedStatement ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                UUID spec_id = rs.getObject("spec_id", java.util.UUID.class);
+                UUID spec_id = (java.util.UUID) rs.getObject("spec_id");
                 result.add(spec_id);
             }
             rs.close();
@@ -201,7 +202,7 @@ public class DatabaseConnectionHandler {
             PreparedStatement ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                UUID supervisor_id = rs.getObject("supervisor_id", java.util.UUID.class);
+                UUID supervisor_id = (java.util.UUID) rs.getObject("supervisor_id");
                 result.add(supervisor_id);
             }
             rs.close();
@@ -305,6 +306,26 @@ public class DatabaseConnectionHandler {
         }
 
         return result.toArray(new Pair[result.size()]);
+    }
+
+
+    // DIVISION QUERY
+    public String[] getJobPositionsAllApplicantsAppliedTo() {
+        ArrayList<String> result = new ArrayList<>();
+        try {
+            String query = "SELECT position_title FROM job_position_belongs_to J WHERE NOT EXISTS ((SELECT A.applicant_id FROM Applicant A) EXCEPT (SELECT AM.applicant_id FROM Application_MADE AM WHERE AM.position_id = J.position_id))";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String position_title = rs.getString("position_title");
+                result.add(position_title);
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return result.toArray(new String[result.size()]);
     }
 
     private void rollbackConnection() {

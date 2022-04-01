@@ -26,13 +26,11 @@ public class Main {
     }
 
     private static Object dbSelection(Request req, Response res) {
-
         return dbConn.getPositionsWithSalary(Integer.parseInt(req.params(":salary")));
     }
 
     private static int testDb() {
         dbConn.close();
-
         return 0;
     }
 
