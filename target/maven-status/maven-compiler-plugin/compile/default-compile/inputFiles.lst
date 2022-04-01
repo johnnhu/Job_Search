@@ -1,15 +1,19 @@
-/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/SpecializationCredits.java
-/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/companies/BusinessCompany.java
-/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/HiringManager.java
-/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/companies/HealthcareCompany.java
-/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/companies/TechCompany.java
-/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/SpecializationInfo.java
-/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/Application_made.java
-/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/Applicant.java
-/Users/johnhbuckets/jSearch/src/main/java/jSearch/database/DatabaseConnectionHandler.java
-/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/University.java
-/Users/johnhbuckets/jSearch/src/main/java/jSearch/Main.java
-/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/Company.java
-/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/JobPosition.java
-/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/Address.java
-/Users/johnhbuckets/jSearch/src/main/java/jSearch/models/CoopSupervisor.java
+/Users/emilychen/Desktop/UBC/2021W2/CPSC 304/Project/jSearch/src/main/java/jSearch/models/Attends.java
+/Users/emilychen/Desktop/UBC/2021W2/CPSC 304/Project/jSearch/src/main/java/jSearch/models/SpecializationCredits.java
+/Users/emilychen/Desktop/UBC/2021W2/CPSC 304/Project/jSearch/src/main/java/jSearch/JsonTransformer.java
+/Users/emilychen/Desktop/UBC/2021W2/CPSC 304/Project/jSearch/src/main/java/jSearch/models/companies/HealthcareCompany.java
+/Users/emilychen/Desktop/UBC/2021W2/CPSC 304/Project/jSearch/src/main/java/jSearch/models/JobPositionBelongsTo.java
+/Users/emilychen/Desktop/UBC/2021W2/CPSC 304/Project/jSearch/src/main/java/jSearch/models/JobPositionCompensation.java
+/Users/emilychen/Desktop/UBC/2021W2/CPSC 304/Project/jSearch/src/main/java/jSearch/database/DatabaseConnectionHandler.java
+/Users/emilychen/Desktop/UBC/2021W2/CPSC 304/Project/jSearch/src/main/java/jSearch/models/SpecializationInfo.java
+/Users/emilychen/Desktop/UBC/2021W2/CPSC 304/Project/jSearch/src/main/java/jSearch/models/companies/BusinessCompany.java
+/Users/emilychen/Desktop/UBC/2021W2/CPSC 304/Project/jSearch/src/main/java/jSearch/models/Address.java
+/Users/emilychen/Desktop/UBC/2021W2/CPSC 304/Project/jSearch/src/main/java/jSearch/models/CoopSupervisorWorksAt.java
+/Users/emilychen/Desktop/UBC/2021W2/CPSC 304/Project/jSearch/src/main/java/jSearch/models/HiringManager.java
+/Users/emilychen/Desktop/UBC/2021W2/CPSC 304/Project/jSearch/src/main/java/jSearch/models/ApplicationMade.java
+/Users/emilychen/Desktop/UBC/2021W2/CPSC 304/Project/jSearch/src/main/java/jSearch/models/Offers.java
+/Users/emilychen/Desktop/UBC/2021W2/CPSC 304/Project/jSearch/src/main/java/jSearch/models/Applicant.java
+/Users/emilychen/Desktop/UBC/2021W2/CPSC 304/Project/jSearch/src/main/java/jSearch/models/University.java
+/Users/emilychen/Desktop/UBC/2021W2/CPSC 304/Project/jSearch/src/main/java/jSearch/Main.java
+/Users/emilychen/Desktop/UBC/2021W2/CPSC 304/Project/jSearch/src/main/java/jSearch/models/Company.java
+/Users/emilychen/Desktop/UBC/2021W2/CPSC 304/Project/jSearch/src/main/java/jSearch/models/companies/TechCompany.java
