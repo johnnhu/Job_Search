@@ -83,23 +83,32 @@ public class DatabaseConnectionHandler {
     // PROJECTION QUERY
     public Object[] getFieldFromApplicant(String columnName) {
         Object[] result;
-        switch(columnName) {
+
+        switch (columnName) {
             case "applicant_id":
                 result = getApplicantIDFromApplicant();
+                break;
             case "applicant_name":
                 result = getApplicantNameFromApplicant();
+                break;
             case "applicant_phone":
                 result = getApplicantPhoneFromApplicant();
+                break;
             case "applicant_email":
                 result = getApplicantEmailFromApplicant();
+                break;
             case "spec_id":
                 result = getSpecIDFromApplicant();
+                break;
             case "supervisor_id":
                 result = getSupervisorIDFromApplicant();
+                break;
             case "university_name":
                 result = getUniversityNameFromApplicant();
+                break;
             default:
-                result = new Object[]{"Invalid column name."};
+                result = new Object[]{columnName + " is an invalid column name."};
+                break;
         }
 
         return result;
@@ -238,7 +247,7 @@ public class DatabaseConnectionHandler {
 
         try {
             String query = "SELECT major, minor, is_honours, degree_type FROM specialization_info, applicant " +
-                    "WHERE applicant.applicant_email = ?";
+                    "WHERE specialization_info.spec_id = applicant.spec_id AND applicant.applicant_email = ?";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1, applicant_email);
             ResultSet rs = ps.executeQuery();
@@ -289,7 +298,7 @@ public class DatabaseConnectionHandler {
         ArrayList<Pair> result = new ArrayList<>();
 
         try {
-            String query = "SELECT position_id, count(applicant_id) FROM application_made GROUP BY position_id";
+            String query = "SELECT position_id, COUNT(applicant_id) FROM application_made GROUP BY position_id";
             PreparedStatement ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
 
@@ -327,6 +336,13 @@ public class DatabaseConnectionHandler {
         }
         return result.toArray(new String[result.size()]);
     }
+
+
+
+    // CRUD OPERATIONS
+    // public void insertApplicationMade() {
+        // TODO
+    // }
 
     private void rollbackConnection() {
         try {
