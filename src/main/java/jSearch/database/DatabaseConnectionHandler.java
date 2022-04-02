@@ -247,7 +247,7 @@ public class DatabaseConnectionHandler {
 
         try {
             String query = "SELECT major, minor, is_honours, degree_type FROM specialization_info, applicant " +
-                    "WHERE applicant.applicant_email = ?";
+                    "WHERE specialization_info.spec_id = applicant.spec_id AND applicant.applicant_email = ?";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1, applicant_email);
             ResultSet rs = ps.executeQuery();
@@ -298,7 +298,7 @@ public class DatabaseConnectionHandler {
         ArrayList<Pair> result = new ArrayList<>();
 
         try {
-            String query = "SELECT position_id, count(applicant_id) FROM application_made GROUP BY position_id";
+            String query = "SELECT position_id, COUNT(applicant_id) FROM application_made GROUP BY position_id";
             PreparedStatement ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
 
