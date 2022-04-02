@@ -23,10 +23,27 @@ public class Main {
 
         get("/selection/:salary", (req, res) -> dbSelection(req, res), new JsonTransformer());
 
+        get("/projection/:column", (req, res) -> dbProjection(req, res), new JsonTransformer());
+
+        get("/join", (req, res) -> dbJoin(req, res), new JsonTransformer());
+
+        get("/nestedAggregation", (req, res) -> dbNAggregation(req, res), new JsonTransformer());
+    }
+
+    private static Object dbNAggregation(Request req, Response res) {
+        return dbConn.getNumberApplicantsPerJobPosition();
+    }
+
+    private static Object dbJoin(Request req, Response res) {
+        return dbConn.getSpecializationFromApplicant(req.body());
     }
 
     private static Object dbSelection(Request req, Response res) {
-        return dbConn.getPositionsWithSalary(Integer.parseInt(req.params(":salary")));
+        return dbConn.getPositionsWithSalary(Integer.parseInt(req.params("salary")));
+    }
+
+    private static Object dbProjection(Request req, Response res) {
+        return dbConn.getFieldFromApplicant(req.params("column"));
     }
 
     private static int testDb() {
