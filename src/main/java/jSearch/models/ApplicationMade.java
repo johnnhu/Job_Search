@@ -4,13 +4,13 @@ import java.util.Date;
 import java.util.UUID;
 
 public class ApplicationMade {
-    UUID application_id;
-    Status status_description;
-    int resume_version;
-    int cover_letter_version;
-    Date date_of_application;
-    UUID applicant_id;
-    UUID position_id;
+    public UUID application_id;
+    public Status status_description;
+    public int resume_version;
+    public int cover_letter_version;
+    public Date date_of_application;
+    public UUID applicant_id;
+    public UUID position_id;
 
     public ApplicationMade(UUID application_id, Status status, int resume_version, int cover_letter_version) {
         this.application_id = application_id;

@@ -13,7 +13,7 @@ public enum Status {
     OP("Offered Position"),
     R("Rejected");
 
-    private final String description;
+    public final String description;
 
     Status(String description) {
         this.description = description;

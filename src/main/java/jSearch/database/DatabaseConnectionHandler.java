@@ -1,9 +1,6 @@
 package jSearch.database;
 
-import jSearch.models.Applicant;
-import jSearch.models.JobPositionBelongsTo;
-import jSearch.models.JobPositionCompensation;
-import jSearch.models.SpecializationInfo;
+import jSearch.models.*;
 import javafx.util.Pair;
 import java.sql.*;
 import java.util.ArrayList;
@@ -340,9 +337,27 @@ public class DatabaseConnectionHandler {
 
 
     // CRUD OPERATIONS
-    // public void insertApplicationMade() {
-        // TODO
-    // }
+    public void insertApplicationMade(ApplicationMade app) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO application_made(application_id, status_description, resume_version, cover_letter_version, date_of_application, applicant_id, position_id) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)");
+            UUID application_id = UUID.randomUUID();
+            ps.setObject(1, application_id);
+            ps.setObject(2, app.status_description);
+            ps.setInt(3, app.resume_version);
+            ps.setInt(4, app.cover_letter_version);
+            ps.setDate(5, (Date) app.date_of_application);
+            ps.setObject(6, app.applicant_id);
+            ps.setObject(7, app.position_id);
+
+            ResultSet rs = ps.executeQuery();
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return;
+    }
 
     private void rollbackConnection() {
         try {

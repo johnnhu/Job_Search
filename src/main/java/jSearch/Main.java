@@ -1,6 +1,7 @@
 package jSearch;
 
 import jSearch.database.DatabaseConnectionHandler;
+import jSearch.models.ApplicationMade;
 import spark.Request;
 import spark.Response;
 
@@ -35,7 +36,7 @@ public class Main {
 
         // endpoints for CRUD operations
         // TODO: in progress
-        // post("/insertApplicationMade", (req, res) -> dbInsert(req, res), new JsonTransformer());
+        post("/insertApplicationMade", (req, res) -> dbInsert(req, res), new JsonTransformer());
 
     }
 
@@ -64,9 +65,10 @@ public class Main {
     }
 
     // TODO: in progress
-    // private static Object dbInsert(Request req, Response res) {
-    //     return dbConn.insertApplicationMade();
-    // }
+    private static void dbInsert(Request req, Response res) {
+        ApplicationMade app = req;
+        dbConn.insertApplicationMade(app);
+    }
 
 
     private static int testDb() {

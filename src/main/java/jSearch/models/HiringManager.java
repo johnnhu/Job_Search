@@ -4,10 +4,10 @@ import java.util.Date;
 import java.util.UUID;
 
 public class HiringManager {
-    UUID emp_id;
-    Date year_hired;
-    String first_name;
-    String last_name;
+    public  UUID emp_id;
+    public Date year_hired;
+    public String first_name;
+    public String last_name;
 
     public HiringManager(UUID emp_id, Date year_hired, String first_name, String last_name) {
         this.emp_id = emp_id;

@@ -3,10 +3,10 @@ package jSearch.models;
 import java.util.UUID;
 
 public class JobPositionCompensation {
-    String position_title;
-    UUID company_id;
-    int weekly_hours;
-    int salary;
+    public String position_title;
+    public UUID company_id;
+    public int weekly_hours;
+    public int salary;
 
     public JobPositionCompensation(String position_title, UUID company_id, int weekly_hours, int salary) {
         this.position_title = position_title;
