@@ -2,6 +2,7 @@ package jSearch;
 
 import jSearch.database.DatabaseConnectionHandler;
 import jSearch.models.Message;
+import jSearch.utils.CorsFilter;
 import spark.Request;
 import spark.Response;
 
@@ -11,24 +12,17 @@ public class Main {
     private static DatabaseConnectionHandler dbConn;
 
     public static void main(String[] args) {
+//        ipAddress("0.0.0.0");
+//        port(9999);
+
+        CorsFilter.apply();
+
         dbConn = new DatabaseConnectionHandler();
-        // enableCORS("*", "GET,PUT,POST,DELETE,OPTIONS", "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
+        exception(Exception.class, (e, req, res) -> e.printStackTrace()); // print all exceptions
 
-        options("*",
-            (request, response) -> {
-                String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
-                if (accessControlRequestHeaders != null) {
-                    response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
-                }
-
-                String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
-                if (accessControlRequestMethod != null) {
-                    response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
-                }
-
-                return "OK";
-            });
-        before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
+        get("/", "application/json", (request, response) -> {
+            return new Message("Hello World");
+        }, new JsonTransformer());
 
         get("/hello/:name", (request, response) -> {
             return "Hello: " + request.params(":name");
@@ -49,6 +43,31 @@ public class Main {
         // TODO: in progress
         // post("/insertApplicationMade", (req, res) -> dbInsert(req, res), new JsonTransformer());
 
+    }
+
+    private static void enableCORS(final String origin, final String methods, final String headers) {
+        options("/*", (request, response) -> {
+
+            String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
+            if (accessControlRequestHeaders != null) {
+                response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
+            }
+
+            String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
+            if (accessControlRequestMethod != null) {
+                response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+            }
+
+            return "OK";
+        });
+
+        before((request, response) -> {
+            response.header("Access-Control-Allow-Origin", origin);
+            response.header("Access-Control-Request-Method", methods);
+            response.header("Access-Control-Allow-Headers", headers);
+            // Note: this may or may not be necessary in your particular application
+            response.type("application/json");
+        });
     }
 
     private static Object dbSelection(Request req, Response res) {
