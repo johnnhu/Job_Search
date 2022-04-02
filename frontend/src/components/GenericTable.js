@@ -5,20 +5,33 @@ import {
     Button,
     Modal
 } from "react-bootstrap"
+import GenericForm from "./GenericForm";
 
 const GenericTable = ({
+    schema,
     data
 }) => {
-    const [show, setShow] = useState(false);
+    const [showDelete, setShowDelete] = useState(false);
+    const [showUpdate, setShowUpdate] = useState(false);
+
     const [selectedRow, setSelectedRow] = useState({});
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleCloseDelete = () => setShowDelete(false);
+    const handleShowDelete = () => setShowDelete(true);
 
-    const { headers, rows } = data;
+    const handleCloseUpdate = () => setShowUpdate(false);
+    const handleShowUpdate = () => setShowUpdate(true);
 
-    if (headers === undefined || rows === undefined) {
+    const { rows } = data;
+
+    if (rows === undefined) {
         return "Loading..."
+    }
+
+    const parseHeaders = (rows) => {
+        if (rows.length === 0) return ['']
+
+        return Object.keys(rows[0])
     }
 
     return (
@@ -27,7 +40,7 @@ const GenericTable = ({
             <Table striped bordered hover size="sm">
                 <thead>
                     <tr>
-                        {headers.map((header) => (
+                        {parseHeaders(rows).map((header) => (
                             <th key={header}>{header}</th>
                         ))}
                         <th>Action</th>
@@ -35,7 +48,6 @@ const GenericTable = ({
                 </thead>
                 <tbody>
                     {rows.map((row) => {
-                        console.log({ row })
                         return (
                             <tr>
                                 {Object.values(row).map((value) => {
@@ -44,10 +56,13 @@ const GenericTable = ({
                                     )
                                 })}
                                 <td>
-                                    <Button variant="primary" size="sm">Update</Button>{` `}
                                     <Button onClick={() => {
                                         setSelectedRow(row)
-                                        handleShow()
+                                        handleShowUpdate()
+                                    }} variant="primary" size="sm">Update</Button>{` `}
+                                    <Button onClick={() => {
+                                        setSelectedRow(row)
+                                        handleShowDelete()
                                     }} variant="danger" size="sm">Delete</Button>
                                 </td>
                             </tr>
@@ -57,10 +72,17 @@ const GenericTable = ({
             </Table>
 
             {/* Edit entry modal */}
-            {/* TODO! */}
+            <Modal show={showUpdate} onHide={handleCloseUpdate}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Update entry</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <GenericForm schema={schema} data={selectedRow} />
+                </Modal.Body>
+            </Modal>
 
             {/* Delete entry modal */}
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={showDelete} onHide={handleCloseDelete}>
                 <Modal.Header closeButton>
                     <Modal.Title>Are you sure you'd like to delete this entry?</Modal.Title>
                 </Modal.Header>
@@ -69,10 +91,10 @@ const GenericTable = ({
                     <pre>{`${JSON.stringify(selectedRow, null, 2)}`}</pre>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
+                    <Button variant="secondary" onClick={handleCloseDelete}>
                         Close
                     </Button>
-                    <Button variant="danger" onClick={handleClose}>
+                    <Button variant="danger" onClick={handleCloseDelete}>
                         Submit
                     </Button>
                 </Modal.Footer>
