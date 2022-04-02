@@ -5,6 +5,10 @@ import spark.Request;
 import spark.Response;
 
 import static spark.Spark.get;
+import static spark.Spark.post;
+import static spark.Spark.put;
+import static spark.Spark.patch;
+import static spark.Spark.delete;
 
 public class Main {
     private static DatabaseConnectionHandler dbConn;
@@ -21,6 +25,7 @@ public class Main {
             return "Hello World";
         }, new JsonTransformer());
 
+        // endpoints for queries:
         get("/selection/:salary", (req, res) -> dbSelection(req, res), new JsonTransformer());
 
         get("/projection/:columnName", (req, res) -> dbProjection(req, res), new JsonTransformer());
@@ -28,6 +33,11 @@ public class Main {
         get("/aggregation", (req, res) -> dbAggregation(req, res), new JsonTransformer());
 
         get("/division", (req, res) -> dbDivision(req, res), new JsonTransformer());
+
+
+        // endpoints for CRUD operations
+        // TODO: in progress
+        // post("/insertApplicationMade", (req, res) -> dbInsert(req, res), new JsonTransformer());
 
     }
 
@@ -46,6 +56,11 @@ public class Main {
     private static Object dbDivision(Request req, Response res) {
         return dbConn.getJobPositionsAllApplicantsAppliedTo();
     }
+
+    // TODO: in progress
+    // private static Object dbInsert(Request req, Response res) {
+    //     return dbConn.insertApplicationMade();
+    // }
 
 
     private static int testDb() {

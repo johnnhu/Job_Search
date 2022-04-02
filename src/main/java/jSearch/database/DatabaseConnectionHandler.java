@@ -337,6 +337,13 @@ public class DatabaseConnectionHandler {
         return result.toArray(new String[result.size()]);
     }
 
+
+
+    // CRUD OPERATIONS
+    // public void insertApplicationMade() {
+        // TODO
+    // }
+
     private void rollbackConnection() {
         try {
             conn.rollback();
