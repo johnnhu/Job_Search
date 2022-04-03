@@ -70,7 +70,7 @@ public class Main {
     }
 
     private static Object dbAggregation(Request req, Response res) {
-        return dbConn.getNumberApplicantsPerUniversity();
+        return dbConn.getNumberDistinctApplicantsAndMinGradYear();
     }
 
     private static Object dbNAggregation(Request req, Response res) {
