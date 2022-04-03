@@ -15,7 +15,7 @@ We hope this project can be used by UBC co-op students to facilitate an effectiv
 
 ## Schema
 
-Here are the changes made to the final schema.
+Here are the changes made to the final schema. Generally speaking, our codebase didn't differ from our proposed schema earlier, as many of the decisions made were straightforward to implement. We made two simplifications to ease implementation in the end, listed below.
 
 * Removed enumeration type for `status_description`; instead, `status_description` was changed to be of type `varchar(100)`
 * `year_hired` was changed from `Date` to `Integer`; using the date class was overly complex for the task at hand
