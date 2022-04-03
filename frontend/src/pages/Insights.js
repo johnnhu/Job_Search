@@ -37,7 +37,7 @@ const Insights = () => {
             <Container>
                 {/* /selection/:salary */}
                 <Row>
-                    <Col xs={2}>Find those with salaries above some threshold</Col>
+                    <Col xs={2}>Selection: find those with salaries above some threshold</Col>
                     <Col>
                         <Form.Group controlId="salary">
                             <RangeSlider min={0} max={10000} value={salary} onChange={changeEvent => setSalary(changeEvent.target.value)} />
@@ -52,7 +52,7 @@ const Insights = () => {
 
                 { /* /project/:column */}
                 <Row>
-                    <Col xs={2}>{`Select a certain column (i.e., perform a projection)`}</Col>
+                    <Col xs={2}>Projection: select a certain column from the applicants table</Col>
                     <Formik initialValues={{ columnName: 'column_name' }} onSubmit={async (values) => {
                         await performQuery(`projection/${values.columnName}`);
                     }}>
@@ -78,21 +78,39 @@ const Insights = () => {
 
                 <br />
 
-                { /* /join */}
+                { /* /join/:email */}
                 <Row>
-                    <Col xs={2}>{`Perform a join`}</Col>
-                    <Col xs={2}><Button onClick={() => {
-                        performQuery(`/join`)
-                    }} variant="primary" type="submit">Go!</Button></Col>
+                    <Col xs={2}>{`Join: determine a specialization from an applicant's email address`}</Col>
+                    <Formik initialValues={{ email: 'john_smith@gmail.com' }} onSubmit={async (values) => {
+                        await performQuery(`join/${values.email}`);
+                    }}>
+                        {({ handleChange, handleSubmit, handleBlur, values, errors }) => (
+                            <>
+                                <Col>
+                                    <Form>
+                                        <Field name="email">
+                                            {({ field, form, meta }) => (
+                                                <Form.Group controlId="email">
+                                                    <Form.Control value={field.value} onChange={field.onChange} placeholder="john_smith@gmail.com" />
+                                                </Form.Group>
+                                            )}
+                                        </Field>
+
+                                    </Form>
+                                </Col>
+                                <Col xs={2}><Button onClick={handleSubmit} variant="primary" type="submit">Go!</Button></Col>
+                            </>
+                        )}
+                    </Formik>
                 </Row>
 
                 <br />
 
                 { /* /aggregation */}
                 <Row>
-                    <Col xs={2}>{`Perform an aggregation query`}</Col>
+                    <Col xs={2}>{`Aggregation: determine the number of universities present in the database`}</Col>
                     <Col xs={2}><Button onClick={() => {
-                        performQuery(`/aggregation`)
+                        performQuery(`aggregation`)
                     }} variant="primary" type="submit">Go!</Button></Col>
                 </Row>
 
@@ -100,9 +118,9 @@ const Insights = () => {
 
                 { /* /nestedAggergation */}
                 <Row>
-                    <Col xs={2}>{`Perform a nested aggregation query`}</Col>
+                    <Col xs={2}>{`Nested aggregation: determine the number of applicants per job position`}</Col>
                     <Col xs={2}><Button onClick={() => {
-                        performQuery(`/nestedAggregation`)
+                        performQuery(`nestedAggregation`)
                     }} variant="primary" type="submit">Go!</Button></Col>
                 </Row>
 
@@ -110,9 +128,9 @@ const Insights = () => {
 
                 { /* /division */}
                 <Row>
-                    <Col xs={2}>{`Perform a division query`}</Col>
+                    <Col xs={2}>{`Division: determine job positions applied to by all applicants`}</Col>
                     <Col xs={2}><Button onClick={() => {
-                        performQuery(`/division`)
+                        performQuery(`division`)
                     }} variant="primary" type="submit">Go!</Button></Col>
                 </Row>
 
