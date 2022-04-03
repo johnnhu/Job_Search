@@ -79,25 +79,6 @@ public class Main {
     private static String dbInsert(Request req, Response res) {
         Gson gson = new Gson();
         Applicant app = gson.fromJson(req.body(), Applicant.class);
-
-//        System.out.println("application id: (" + app.application_id.getClass().getName() + ") " + app.application_id);
-//        System.out.println("status: (" + app.status.getClass().getName() + ") " + app.status);
-//        System.out.println("applicant id: (" + app.applicant_id.getClass().getName() + ") " + app.applicant_id);
-//        System.out.println("position id: (" + app.position_id.getClass().getName() + ") " + app.position_id);
-
-//        String status = req.body().
-//        String status = req.params("status_description");
-//        int resume_version = Integer.parseInt(req.params("resume_version"));
-//        int cover_letter_version = Integer.parseInt(req.params("cover_letter_version"));
-//        UUID applicant_id = UUID.fromString(req.params("applicant_id"));
-//        UUID position_id = UUID.fromString(req.params("position_id"));
-
-//        try {
-//            Date date_of_application = parseDate(req.params("date_of_application"));
-//            app = new ApplicationMade(status, resume_version, cover_letter_version, date_of_application, applicant_id, position_id);
-//        } catch (ParseException e) {
-//            app = new ApplicationMade(status, resume_version, cover_letter_version, applicant_id, position_id);
-//        }
         return dbConn.insertApplicant(app);
     }
 
