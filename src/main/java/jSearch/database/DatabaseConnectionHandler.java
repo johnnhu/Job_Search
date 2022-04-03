@@ -360,7 +360,7 @@ public class DatabaseConnectionHandler {
         return result.toArray(new Applicant[result.size()]);
     }
 
-    public String insertApplicant(Applicant app) {
+    public Message insertApplicant(Applicant app) {
         try {
             PreparedStatement ps = conn.prepareStatement(
                     "INSERT INTO applicant(applicant_id, applicant_name, applicant_phone, applicant_email, spec_id, supervisor_id, university_name) "
@@ -381,10 +381,11 @@ public class DatabaseConnectionHandler {
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
-        return "Created and saved new entry into table Applicant";
+
+        return new Message("OK");
     }
 
-    public String updateApplicant(Applicant app) {
+    public Message updateApplicant(Applicant app) {
         try {
             PreparedStatement ps = conn.prepareStatement(
                     "UPDATE applicant SET applicant_id = ?, applicant_name = ?, applicant_phone = ?, applicant_email = ?, spec_id = ?, supervisor_id = ?, university_name = ? WHERE applicant_id = ?");
@@ -404,7 +405,7 @@ public class DatabaseConnectionHandler {
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
-        return "Updated entry in table Applicant";
+        return new Message("OK");
     }
 
     public Applicant[] getApplicants() {

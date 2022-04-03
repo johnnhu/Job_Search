@@ -25,12 +25,16 @@ const GenericForm = ({ path, schema, data, handleClose, doRefetch, update }) => 
         setLoading(true);
 
         try {
-            // TODO: implement; this currently throws an error
+            console.log({ values });
+            console.log(`${BASE_URL}/${path}`);
+
             const response = await fetch(`${BASE_URL}/${path}`, {
                 method: update ? 'PUT' : 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(values)
             })
+            console.log({ response });
+
             const data = await response.json();
 
             console.log('Completed form query!', { data });

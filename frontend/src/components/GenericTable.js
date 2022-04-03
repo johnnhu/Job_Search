@@ -44,24 +44,41 @@ const GenericTable = ({
     const handleShowDelete = () => setShowDelete(true);
 
     const doFetch = async () => {
-        setLoading(true);
+        if (path !== 'applicant') {
+            setData({
+                rows: [{
+                    'columnA': 'valueA 1',
+                    'columnB': 'valueB 1',
+                    'columnC': 'valueC 1'
+                },
+                {
+                    'columnA': 'valueA 2',
+                    'columnB': 'valueB 2',
+                    'columnC': 'valueC 2'
+                }]
+            })
 
-        try {
-            const result = await fetch(`${BASE_URL}/${path}s`)
-            console.log(result);
+            setLoading(false);
+        } else {
+            setLoading(true);
 
-            const body = await result.json();
-            console.log(body);
+            try {
+                const result = await fetch(`${BASE_URL}/${path}s`)
+                console.log(result);
 
-            const obj = {
-                rows: body
+                const body = await result.json();
+                console.log(body);
+
+                const obj = {
+                    rows: body
+                }
+
+                setData(obj);
+            } catch (error) {
+                console.error(error)
+            } finally {
+                setLoading(false)
             }
-
-            setData(obj);
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setLoading(false)
         }
     }
 

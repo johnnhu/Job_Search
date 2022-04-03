@@ -2,9 +2,16 @@ package jSearch;
 
 import com.google.gson.Gson;
 import jSearch.database.DatabaseConnectionHandler;
+import jSearch.models.Applicant;
 import jSearch.models.Message;
 import spark.Request;
 import spark.Response;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import static spark.Spark.*;
 
@@ -41,10 +48,8 @@ public class Main {
         delete("/applicant/:id", (req, res) -> dbDeleteApplicant(req, res), new JsonTransformer());
 
         // endpoints for CRUD operations
-        post("/applicants", (req, res) -> dbInsert(req, res), new JsonTransformer());
-        get("/applicants", (req, res) -> dbApplicants(req, res), new JsonTransformer());
-        put("/update_applicant", (req, res) -> dbUpdateApplicant(req, res), new JsonTransformer());
-
+        post("/applicant", (req, res) -> dbInsert(req, res), new JsonTransformer());
+        put("/applicant", (req, res) -> dbUpdateApplicant(req, res), new JsonTransformer());
     }
 
     private static void enableCORS(final String origin, final String methods, final String headers) {
@@ -100,13 +105,14 @@ public class Main {
         return dbConn.getJobPositionsAllApplicantsAppliedTo();
     }
 
-    private static String dbInsert(Request req, Response res) {
+    private static Object dbInsert(Request req, Response res) {
         Gson gson = new Gson();
+        System.out.println(req.body());
         Applicant app = gson.fromJson(req.body(), Applicant.class);
         return dbConn.insertApplicant(app);
     }
 
-    private static String dbUpdateApplicant(Request req, Response res) {
+    private static Object dbUpdateApplicant(Request req, Response res) {
         Gson gson = new Gson();
         Applicant app = gson.fromJson(req.body(), Applicant.class);
         return dbConn.updateApplicant(app);
