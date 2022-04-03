@@ -268,17 +268,17 @@ public class DatabaseConnectionHandler {
 
 
     // AGGREGATION QUERY
-    public Pair[] getNumberApplicantsPerUniversity() {
+    public Pair[] getNumberDistinctApplicantsAndMinGradYear() {
         ArrayList<Pair> result = new ArrayList<>();
 
         try {
-            String query = "SELECT university_name, COUNT(*) FROM attends GROUP BY university_name";
+            String query = "SELECT COUNT(distinct applicant_id), MIN(graduation_year) FROM attends";
             PreparedStatement ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Pair model = new Pair<String, Integer>(rs.getString("university_name"),
-                        rs.getInt("count"));
+                Pair model = new Pair<String, Integer>(rs.getString("count"),
+                        rs.getInt("min"));
                 result.add(model);
             }
             rs.close();
