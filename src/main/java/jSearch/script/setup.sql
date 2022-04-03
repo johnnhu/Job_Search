@@ -128,8 +128,8 @@ CREATE TABLE application_made(
     date_of_application varchar(50),
     applicant_id UUID NOT NULL,
     position_id UUID NOT NULL,
-    FOREIGN KEY(applicant_id) REFERENCES applicant,
-    FOREIGN KEY(position_id) REFERENCES job_position_belongs_to
+    FOREIGN KEY(applicant_id) REFERENCES applicant ON DELETE CASCADE,
+    FOREIGN KEY(position_id) REFERENCES job_position_belongs_to ON DELETE CASCADE
 );
 INSERT INTO application_made(application_id, status_description, resume_version, cover_letter_version, date_of_application, applicant_id, position_id) VALUES ('403925c0-9b4e-11ec-b909-0242ac120002', 'Not Started', 5, 1, '2022-01-03', '530ab1f6-9b4d-11ec-b909-0242ac120002', '468516d2-9b4e-11ec-b909-0242ac120002');
 INSERT INTO application_made(application_id, status_description, resume_version, cover_letter_version, date_of_application, applicant_id, position_id) VALUES ('40392886-9b4e-11ec-b909-0242ac120002', 'In Progress', 2, 5, '2021-04-04', '530ab732-9b4d-11ec-b909-0242ac120002', '46851a24-9b4e-11ec-b909-0242ac120002');
@@ -151,8 +151,8 @@ CREATE TABLE attends(
     since_year integer NOT NULL,
     graduation_year integer,
     PRIMARY KEY (applicant_id, university_name),
-    FOREIGN KEY(applicant_id) REFERENCES applicant,
-    FOREIGN KEY(university_name) REFERENCES university
+    FOREIGN KEY(applicant_id) REFERENCES applicant ON DELETE CASCADE,
+    FOREIGN KEY(university_name) REFERENCES university ON DELETE CASCADE
 );
 INSERT INTO attends(applicant_id, university_name, since_year, graduation_year) VALUES ('530ab1f6-9b4d-11ec-b909-0242ac120002', 'University of British Columbia', 2019, 2026);
 INSERT INTO attends(applicant_id, university_name, since_year, graduation_year) VALUES ('530ab732-9b4d-11ec-b909-0242ac120002', 'McMaster University', 2020, 2024);
@@ -292,8 +292,8 @@ CREATE TABLE oversees(
     emp_id UUID,
     applicant_id UUID,
     PRIMARY KEY(emp_id, applicant_id),
-    FOREIGN KEY (emp_id) REFERENCES hiring_manager_works_for,
-    FOREIGN KEY (applicant_id) REFERENCES applicant
+    FOREIGN KEY (emp_id) REFERENCES hiring_manager_works_for ON DELETE CASCADE,
+    FOREIGN KEY (applicant_id) REFERENCES applicant ON DELETE CASCADE
 );
 INSERT INTO oversees(emp_id, applicant_id) VALUES ('f1cdb412-9b63-11ec-b909-0242ac120002', '530ab1f6-9b4d-11ec-b909-0242ac120002');
 INSERT INTO oversees(emp_id, applicant_id) VALUES ('f1cdb61a-9b63-11ec-b909-0242ac120002', '530ab732-9b4d-11ec-b909-0242ac120002');
