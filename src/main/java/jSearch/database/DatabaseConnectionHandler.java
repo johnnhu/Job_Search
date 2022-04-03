@@ -1,6 +1,9 @@
 package jSearch.database;
 
-import jSearch.models.*;
+import jSearch.models.Applicant;
+import jSearch.models.JobPositionCompensation;
+import jSearch.models.Message;
+import jSearch.models.SpecializationInfo;
 import javafx.util.Pair;
 
 import java.sql.*;
@@ -9,7 +12,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class DatabaseConnectionHandler {
-
     private static final String POSTGRESQL_URL = "jdbc:postgresql://localhost:5432/postgres";
     private static final String POSTGRESQL_USER = "postgres";
     private static final String POSTGRESQL_PASSWORD = "password";
@@ -52,7 +54,6 @@ public class DatabaseConnectionHandler {
         }
     }
 
-    // SELECTION QUERY
     public JobPositionCompensation[] getPositionsWithSalary(int minSalary) {
         ArrayList<JobPositionCompensation> result = new ArrayList<>();
 
@@ -78,7 +79,6 @@ public class DatabaseConnectionHandler {
         return result.toArray(new JobPositionCompensation[result.size()]);
     }
 
-    // PROJECTION QUERY
     public Object[] getFieldFromApplicant(String columnName) {
         Object[] result;
 
@@ -238,7 +238,6 @@ public class DatabaseConnectionHandler {
         return result.toArray(new String[result.size()]);
     }
 
-    // JOIN QUERY
     public SpecializationInfo[] getSpecializationFromApplicant(String applicant_email) {
         ArrayList<SpecializationInfo> result = new ArrayList<>();
 
@@ -266,7 +265,6 @@ public class DatabaseConnectionHandler {
         return result.toArray(new SpecializationInfo[result.size()]);
     }
 
-    // AGGREGATION QUERY
     public Pair[] getNumberDistinctApplicantsAndMinGradYear() {
         ArrayList<Pair> result = new ArrayList<>();
 
@@ -288,7 +286,6 @@ public class DatabaseConnectionHandler {
         return result.toArray(new Pair[result.size()]);
     }
 
-    // NESTED AGGREGATION WITH GROUP BY QUERY
     public Pair[] getNumberApplicantsPerJobPosition() {
         ArrayList<Pair> result = new ArrayList<>();
 
@@ -312,17 +309,18 @@ public class DatabaseConnectionHandler {
         return result.toArray(new Pair[result.size()]);
     }
 
-    // DIVISION QUERY
     public String[] getJobPositionsAllApplicantsAppliedTo() {
         ArrayList<String> result = new ArrayList<>();
         try {
             String query = "SELECT position_title FROM job_position_belongs_to J WHERE NOT EXISTS ((SELECT A.applicant_id FROM Applicant A) EXCEPT (SELECT AM.applicant_id FROM Application_MADE AM WHERE AM.position_id = J.position_id))";
             PreparedStatement ps = conn.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
+
             while (rs.next()) {
                 String position_title = rs.getString("position_title");
                 result.add(position_title);
             }
+
             rs.close();
             ps.close();
         } catch (SQLException e) {
@@ -331,7 +329,6 @@ public class DatabaseConnectionHandler {
         return result.toArray(new String[result.size()]);
     }
 
-    // CRUD OPERATIONS
     public Applicant[] getAllApplicants() {
         ArrayList<Applicant> result = new ArrayList<>();
 
@@ -441,16 +438,11 @@ public class DatabaseConnectionHandler {
         try {
             UUID id2 = UUID.fromString(id);
 
-            System.out.println(id2);
-
             String query = "DELETE FROM applicant WHERE applicant_id = ?";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setObject(1, id2, java.sql.Types.OTHER);
 
-            System.out.println(ps);
-
             int rs = ps.executeUpdate();
-            System.out.println(rs);
 
             ps.close();
         } catch (SQLException e) {

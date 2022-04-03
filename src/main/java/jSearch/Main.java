@@ -23,20 +23,13 @@ public class Main {
 
         enableCORS("*", "*", "*");
 
-        exception(Exception.class, (e, req, res) -> e.printStackTrace()); // print all exceptions
+        exception(Exception.class, (e, req, res) -> e.printStackTrace());
 
         get("/", "application/json", (request, response) -> {
-            return new Message("Hello World");
+            return new Message("Hello, world!");
         }, new JsonTransformer());
 
-        get("/hello/:name", (request, response) -> {
-            return "Hello: " + request.params(":name");
-        });
-        get("/test", (req, res) -> testDb());
-
-        get("/hello", "application/json", (request, response) -> new Message("Hello World"), new JsonTransformer());
-
-        // endpoints for queries:
+        // Endpoints for "custom" queries
         get("/selection/:salary", (req, res) -> dbSelection(req, res), new JsonTransformer());
         get("/projection/:column", (req, res) -> dbProjection(req, res), new JsonTransformer());
         get("/join/:email", (req, res) -> dbJoin(req, res), new JsonTransformer());
@@ -44,10 +37,10 @@ public class Main {
         get("/nestedAggregation", (req, res) -> dbNAggregation(req, res), new JsonTransformer());
         get("/division", (req, res) -> dbDivision(req, res), new JsonTransformer());
 
+        // CRUD demonstration for applicants; NOTE, other entities not needed (...and
+        // would take ages to implement exhaustively); frontend renders dummy data
         get("/applicants", (req, res) -> dbGetApplicants(req, res), new JsonTransformer());
         delete("/applicant/:id", (req, res) -> dbDeleteApplicant(req, res), new JsonTransformer());
-
-        // endpoints for CRUD operations
         post("/applicant", (req, res) -> dbInsert(req, res), new JsonTransformer());
         put("/applicant", (req, res) -> dbUpdateApplicant(req, res), new JsonTransformer());
     }
@@ -72,7 +65,6 @@ public class Main {
             response.header("Access-Control-Allow-Origin", origin);
             response.header("Access-Control-Request-Method", methods);
             response.header("Access-Control-Allow-Headers", headers);
-            // Note: this may or may not be necessary in your particular application
             response.type("application/json");
         });
     }
