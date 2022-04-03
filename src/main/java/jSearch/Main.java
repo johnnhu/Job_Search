@@ -34,7 +34,7 @@ public class Main {
         // endpoints for queries:
         get("/selection/:salary", (req, res) -> dbSelection(req, res), new JsonTransformer());
         get("/projection/:column", (req, res) -> dbProjection(req, res), new JsonTransformer());
-        get("/join", (req, res) -> dbJoin(req, res), new JsonTransformer());
+        get("/join/:email", (req, res) -> dbJoin(req, res), new JsonTransformer());
         get("/aggregation", (req, res) -> dbAggregation(req, res), new JsonTransformer());
         get("/nestedAggregation", (req, res) -> dbNAggregation(req, res), new JsonTransformer());
         get("/division", (req, res) -> dbDivision(req, res), new JsonTransformer());
@@ -79,7 +79,7 @@ public class Main {
     }
 
     private static Object dbJoin(Request req, Response res) {
-        return dbConn.getSpecializationFromApplicant(req.body());
+        return dbConn.getSpecializationFromApplicant(req.params("email"));
     }
 
     private static Object dbAggregation(Request req, Response res) {
