@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from "react-toastify";
 
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -20,35 +20,50 @@ import Offers from "./pages/entities/Offers";
 import JobPositionCompensation from "./pages/entities/JobPositionCompensation";
 import JobPositionBelongsTo from "./pages/entities/JobPositionBelongsTo";
 
-import './App.css';
+import "./App.css";
 
 function App() {
-    return (
-        <>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/insights" element={<Insights />} />
-                <Route path="/entities" element={<Entities />} />
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/insights" element={<Insights />} />
+        <Route path="/entities" element={<Entities />} />
 
-                <Route path="/entities/address" element={<Address />} />
-                <Route path="/entities/applicants" element={<Applicants />} />
-                <Route path="/entities/applicationMade" element={<ApplicationMade />} />
-                <Route path="/entities/attends" element={<Attends />} />
-                <Route path="/entities/company" element={<Company />} />
-                <Route path="/entities/coopSupervisorWorksAt" element={<CoopSupervisorWorksAt />} />
-                <Route path="/entities/hiringManager" element={<HiringManager />} />
-                <Route path="/entities/jobPositionBelongsTo" element={<JobPositionBelongsTo />} />
-                <Route path="/entities/jobPositionCompensation" element={<JobPositionCompensation />} />
-                <Route path="/entities/offers" element={<Offers />} />
-                <Route path="/entities/specializationCredits" element={<SpecializationCredits />} />
-                <Route path="/entities/specializationInfo" element={<SpecializationInfo />} />
-                <Route path="/entities/university" element={<University />} />
-            </Routes>
+        <Route path="/entities/address" element={<Address />} />
+        <Route path="/entities/applicants" element={<Applicants />} />
+        <Route path="/entities/applicationMade" element={<ApplicationMade />} />
+        <Route path="/entities/attends" element={<Attends />} />
+        <Route path="/entities/company" element={<Company />} />
+        <Route
+          path="/entities/coopSupervisorWorksAt"
+          element={<CoopSupervisorWorksAt />}
+        />
+        <Route path="/entities/hiringManager" element={<HiringManager />} />
+        <Route
+          path="/entities/jobPositionBelongsTo"
+          element={<JobPositionBelongsTo />}
+        />
+        <Route
+          path="/entities/jobPositionCompensation"
+          element={<JobPositionCompensation />}
+        />
+        <Route path="/entities/offers" element={<Offers />} />
+        <Route
+          path="/entities/specializationCredits"
+          element={<SpecializationCredits />}
+        />
+        <Route
+          path="/entities/specializationInfo"
+          element={<SpecializationInfo />}
+        />
+        <Route path="/entities/university" element={<University />} />
+      </Routes>
 
-            <ToastContainer />
-        </>
-    );
+      <ToastContainer />
+    </>
+  );
 }
 
 export default App;

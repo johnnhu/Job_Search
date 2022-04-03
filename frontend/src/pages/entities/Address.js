@@ -1,14 +1,14 @@
-import GenericTable from '../../components/GenericTable';
-import Layout from '../../layout/Layout'
+import GenericTable from "../../components/GenericTable";
+import Layout from "../../layout/Layout";
 
-import { ADDRESS } from '../../utils/schemas';
+import { ADDRESS } from "../../utils/schemas";
 
 const Address = () => {
-    return (
-        <Layout title={"Address"}>
-            <GenericTable path={'address'} schema={ADDRESS} />
-        </Layout>
-    );
-}
+  return (
+    <Layout title={"Address"}>
+      <GenericTable path={"address"} schema={ADDRESS} />
+    </Layout>
+  );
+};
 
 export default Address;
