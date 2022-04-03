@@ -45,6 +45,7 @@ public class Main {
         // endpoints for CRUD operations
         post("/applicants", (req, res) -> dbInsert(req, res), new JsonTransformer());
         get("/applicants", (req, res) -> dbApplicants(req, res), new JsonTransformer());
+        put("/update_applicant", (req, res) -> dbUpdateApplicant(req, res), new JsonTransformer());
 
     }
 
@@ -80,6 +81,12 @@ public class Main {
         Gson gson = new Gson();
         Applicant app = gson.fromJson(req.body(), Applicant.class);
         return dbConn.insertApplicant(app);
+    }
+
+    private static String dbUpdateApplicant(Request req, Response res) {
+        Gson gson = new Gson();
+        Applicant app = gson.fromJson(req.body(), Applicant.class);
+        return dbConn.updateApplicant(app);
     }
 
 
