@@ -1,5 +1,6 @@
 package jSearch.models;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -27,5 +28,14 @@ public class ApplicationMade {
         this.date_of_application = date_of_application;
         this.applicant_id = applicant_id;
         this.position_id = position_id;
+    }
+
+    public ApplicationMade(Status status, int resume, int cover, Date date, UUID applicant, UUID position) {
+        this.status_description = status;
+        this.resume_version = resume;
+        this.cover_letter_version = cover;
+        this.date_of_application = date;
+        this.applicant_id = applicant;
+        this.position_id = position;
     }
 }

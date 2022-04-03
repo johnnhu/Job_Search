@@ -1,9 +1,12 @@
 package jSearch.database;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import jSearch.models.*;
 import javafx.util.Pair;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class DatabaseConnectionHandler {
@@ -337,7 +340,7 @@ public class DatabaseConnectionHandler {
 
 
     // CRUD OPERATIONS
-    public void insertApplicationMade(ApplicationMade app) {
+    public Object insertApplicationMade(ApplicationMade app) {
         try {
             PreparedStatement ps = conn.prepareStatement("INSERT INTO application_made(application_id, status_description, resume_version, cover_letter_version, date_of_application, applicant_id, position_id) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)");
@@ -356,7 +359,7 @@ public class DatabaseConnectionHandler {
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
-        return;
+        return app;
     }
 
     private void rollbackConnection() {
@@ -365,5 +368,59 @@ public class DatabaseConnectionHandler {
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
+    }
+
+    public Object deleteApplicantAndAddress(String university_name) {
+        ArrayList<String> result = new ArrayList<>();
+        try {
+            String query = "DELETE FROM applicant WHERE applicant.university_name = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            university_name = university_name.replace("%20", " ");
+            ps.setString(1, university_name);
+            // todo change to without "", sql query cannot take ""
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String name = rs.getString("applicant_name");
+                result.add(name);
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return result;
+    }
+
+    public Object selectAll(String table) {
+        ArrayList<Object> result = new ArrayList<>();
+
+        try {
+            String query = "SELECT * FROM ?;";
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            // todo change to without "", sql query cannot take ""
+
+            ps.setString(1, table);
+            ResultSet rs = ps.executeQuery();
+
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int count = rsmd.getColumnCount();
+
+            while (rs.next()) {
+                JsonObject model = null;
+                for (int i = 1; i <= count; i++ ) {
+                    String name = rsmd.getColumnName(i);
+                    model.add(name, (JsonElement) rs.getObject(name));
+                }
+                result.add(model);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result;
     }
 }
