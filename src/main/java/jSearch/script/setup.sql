@@ -81,6 +81,8 @@ INSERT INTO coop_supervisor_works_at(supervisor_id, supervisor_name, supervisor_
 INSERT INTO coop_supervisor_works_at(supervisor_id, supervisor_name, supervisor_phone, supervisor_email, capacity, worked_since, university_name) VALUES ('f72a636e-9b4b-11ec-b909-0242ac120002', 'Celine Francis', '514-324-5356', 'celine.francis@mcgill.ca', 25, 2017, 'McGill University');
 INSERT INTO coop_supervisor_works_at(supervisor_id, supervisor_name, supervisor_phone, supervisor_email, capacity, worked_since, university_name) VALUES ('fd86c144-9b4b-11ec-b909-0242ac120002', 'Emily Fuchs', '416-822-2481', 'emilyef@uoft.ca', 100, 2020, 'University of Toronto');
 INSERT INTO coop_supervisor_works_at(supervisor_id, supervisor_name, supervisor_phone, supervisor_email, capacity, worked_since, university_name) VALUES ('01d697ba-9b4c-11ec-b909-0242ac120002', 'Lara Hall', '613-543-6547', 'lara.hall@queens.ca', 42, 2011, 'Queens University');
+INSERT INTO coop_supervisor_works_at(supervisor_id, supervisor_name, supervisor_phone, supervisor_email, capacity, worked_since, university_name) VALUES ('46851f56-9b4e-11ec-b909-0242ac120002', 'Patrice Belleville', '613-243-6547', 'patrice.belleville@ubc.ca', 42, 2011, 'University of British Columbia');
+
 
 drop table if exists applicant CASCADE;
 CREATE TABLE applicant(
@@ -115,15 +117,15 @@ INSERT INTO job_position_belongs_to(position_id, position_title, is_filled, comp
 INSERT INTO job_position_belongs_to(position_id, position_title, is_filled, company_id) VALUES ('46851d9e-9b4e-11ec-b909-0242ac120002', 'Engineering Intern', False, '2f12ff34-9b51-11ec-b909-0242ac120002');
 INSERT INTO job_position_belongs_to(position_id, position_title, is_filled, company_id) VALUES ('46851f56-9b4e-11ec-b909-0242ac120002', 'Healthcare Consulting Intern', False, '2f1301aa-9b51-11ec-b909-0242ac120002');
 
+-- EXAMPLES OF STATUSES: ('Not Started', 'In Progress', 'Submitted', 'Offered Interview', 'Under Review', 'Offered Position', 'Rejected')
 drop type if exists status CASCADE;
-CREATE TYPE status AS ENUM ('Not Started', 'In Progress', 'Submitted', 'Offered Interview', 'Under Review', 'Offered Position', 'Rejected');
 drop table if exists application_made CASCADE;
 CREATE TABLE application_made(
     application_id UUID PRIMARY KEY,
-    status_description status,
+    status_description varchar(100),
     resume_version integer,
     cover_letter_version integer,
-    date_of_application date,
+    date_of_application varchar(50),
     applicant_id UUID NOT NULL,
     position_id UUID NOT NULL,
     FOREIGN KEY(applicant_id) REFERENCES applicant,
