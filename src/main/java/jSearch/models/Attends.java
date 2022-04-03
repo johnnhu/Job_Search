@@ -3,10 +3,10 @@ package jSearch.models;
 import java.util.UUID;
 
 public class Attends {
-    UUID applicant_id;
-    String university_name;
-    int since_year;
-    int graduation_year;
+    public UUID applicant_id;
+    public String university_name;
+    public int since_year;
+    public int graduation_year;
 
     public Attends(UUID applicant_id, String university_name, int since_year, int graduation_year) {
         this.applicant_id = applicant_id;

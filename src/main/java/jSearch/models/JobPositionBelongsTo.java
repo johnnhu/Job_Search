@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class JobPositionBelongsTo {
-    UUID position_id;
-    String position_title;
-    boolean is_filled;
-    UUID company_id;
+    public UUID position_id;
+    public String position_title;
+    public boolean is_filled;
+    public UUID company_id;
 
     public JobPositionBelongsTo(UUID position_id, String position_title, boolean is_filled, UUID company_id) {
         this.position_id = position_id;
