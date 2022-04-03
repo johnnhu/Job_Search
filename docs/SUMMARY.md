@@ -5,7 +5,7 @@ Our project allows users to track job applications for a given requirement cycle
 * Determine all jobs with compensation above some minimum threshold, to demonstrate selection
 * Select a give column from the applicant table (e.g., only applicant names), to demonstrate projection
 * Determine a specialization from an applicant's email address, to demonstrate a join
-* Determine the number of universities in the database, to demonstrate aggregation
+* Determine the number of applicants who graduated in the earliest year, to demonstrate aggregation
 * Determine the number of applicants per job position, to demonstrate nested aggregation
 * Determine the job positions that _all_ applicants applied to, to demonstrate division
 
