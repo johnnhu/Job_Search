@@ -2,7 +2,6 @@ package jSearch;
 
 import jSearch.database.DatabaseConnectionHandler;
 import jSearch.models.Message;
-import jSearch.utils.CorsFilter;
 import spark.Request;
 import spark.Response;
 
@@ -12,12 +11,10 @@ public class Main {
     private static DatabaseConnectionHandler dbConn;
 
     public static void main(String[] args) {
-//        ipAddress("0.0.0.0");
-//        port(9999);
-
-        CorsFilter.apply();
-
         dbConn = new DatabaseConnectionHandler();
+
+        enableCORS("*", "*", "*");
+
         exception(Exception.class, (e, req, res) -> e.printStackTrace()); // print all exceptions
 
         get("/", "application/json", (request, response) -> {
@@ -38,6 +35,9 @@ public class Main {
         get("/aggregation", (req, res) -> dbAggregation(req, res), new JsonTransformer());
         get("/nestedAggregation", (req, res) -> dbNAggregation(req, res), new JsonTransformer());
         get("/division", (req, res) -> dbDivision(req, res), new JsonTransformer());
+
+        get("/applicants", (req, res) -> dbGetApplicants(req, res), new JsonTransformer());
+        delete("/applicant/:id", (req, res) -> dbDeleteApplicant(req, res), new JsonTransformer());
 
         // endpoints for CRUD operations
         // TODO: in progress
@@ -98,6 +98,17 @@ public class Main {
     // private static Object dbInsert(Request req, Response res) {
     //     return dbConn.insertApplicationMade();
     // }
+
+    public static Object dbGetApplicants(Request req, Response res) {
+        return dbConn.getApplicants();
+    }
+
+    public static Object dbDeleteApplicant(Request req, Response res) {
+        String id = req.params("id");
+        dbConn.deleteApplicant(id);
+
+        return new Message("OK");
+    }
 
     private static int testDb() {
         dbConn.close();

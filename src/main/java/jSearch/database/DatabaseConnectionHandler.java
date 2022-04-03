@@ -1,12 +1,14 @@
 package jSearch.database;
 
 import jSearch.models.Applicant;
-import jSearch.models.JobPositionBelongsTo;
 import jSearch.models.JobPositionCompensation;
+import jSearch.models.Message;
 import jSearch.models.SpecializationInfo;
 import javafx.util.Pair;
+
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class DatabaseConnectionHandler {
@@ -269,7 +271,6 @@ public class DatabaseConnectionHandler {
         return result.toArray(new SpecializationInfo[result.size()]);
     }
 
-
     // AGGREGATION QUERY
     public Pair[] getNumberApplicantsPerUniversity() {
         ArrayList<Pair> result = new ArrayList<>();
@@ -291,7 +292,6 @@ public class DatabaseConnectionHandler {
         }
         return result.toArray(new Pair[result.size()]);
     }
-
 
     // NESTED AGGREGATION WITH GROUP BY QUERY
     public Pair[] getNumberApplicantsPerJobPosition() {
@@ -343,6 +343,58 @@ public class DatabaseConnectionHandler {
     // public void insertApplicationMade() {
         // TODO
     // }
+
+    public Applicant[] getApplicants() {
+        List<Applicant> result = new ArrayList<>();
+
+        try {
+            String query = "SELECT * FROM applicant";
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Applicant model = new Applicant((java.util.UUID) rs.getObject("applicant_id"),
+                    rs.getString("applicant_name"),
+                    rs.getString("applicant_phone"),
+                    rs.getString("applicant_email"),
+                    (java.util.UUID) rs.getObject("spec_id"),
+                    (java.util.UUID) rs.getObject("supervisor_id"),
+                    rs.getString("university_name"));
+                result.add(model);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new Applicant[result.size()]);
+    }
+
+    public Message deleteApplicant(String id) {
+        try {
+            UUID id2 = UUID.fromString(id);
+
+            System.out.println(id2);
+
+            String query = "DELETE FROM applicant WHERE applicant_id = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setObject(1, id2, java.sql.Types.OTHER);
+
+            System.out.println(ps);
+
+            int rs = ps.executeUpdate();
+            System.out.println(rs);
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return new Message("OK");
+    }
 
     private void rollbackConnection() {
         try {

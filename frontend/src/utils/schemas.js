@@ -7,12 +7,13 @@ export const ADDRESS = {
 }
 
 export const APPLICANT = {
-    applicantId: 'string',
-    applicantName: 'string',
-    applicantPhone: 'phone',
-    specId: 'string',
-    supervisorId: 'string',
-    universityName: 'string'
+    applicant_id: 'string',
+    applicant_name: 'string',
+    applicant_phone: 'phone',
+    applicant_email: 'string',
+    spec_id: 'string',
+    supervisor_id: 'string',
+    university_name: 'string'
 }
 
 export const APPLICATION_MADE = {

@@ -8,6 +8,15 @@ import {
 } from "react-bootstrap"
 import GenericForm from "./GenericForm";
 import { BASE_URL } from '../utils/constants'
+import { APPLICANT } from "../utils/schemas";
+
+const getId = (schema, selectedRow) => {
+    if (schema === APPLICANT) {
+        return selectedRow['applicant_id'];
+    }
+
+    return Object.values(selectedRow)[0];
+}
 
 const GenericTable = ({
     path,
@@ -34,8 +43,31 @@ const GenericTable = ({
     const handleCloseDelete = () => setShowDelete(false);
     const handleShowDelete = () => setShowDelete(true);
 
+    const doFetch = async () => {
+        setLoading(true);
+
+        try {
+            const result = await fetch(`${BASE_URL}/${path}s`)
+            console.log(result);
+
+            const body = await result.json();
+            console.log(body);
+
+            const obj = {
+                rows: body
+            }
+
+            setData(obj);
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
     useEffect(() => {
         doFetch();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
@@ -44,40 +76,13 @@ const GenericTable = ({
             doFetch();
         }
         setRefetch(0);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [refetch]);
 
     const parseHeaders = (rows) => {
         if (rows.length === 0) return ['']
 
         return Object.keys(rows[0])
-    }
-
-    const doFetch = async () => {
-        setLoading(true);
-
-        try {
-            const data = {
-                rows: [
-                    {
-                        applicantId: "1",
-                        applicantName: "Michael DeMarco",
-                        applicantPhone: "7806809634",
-                        specId: "2",
-                        supervisorId: "3",
-                        universityName: "UBC",
-                    }
-                ]
-            }
-
-            console.log('Did fetch!', { data });
-            notify('Data fetched!');
-
-            setData(data);
-        } catch (error) {
-            console.error(error)
-        } finally {
-            setLoading(false)
-        }
     }
 
     const doRefetch = () => {
@@ -88,12 +93,13 @@ const GenericTable = ({
         setLoading(true);
 
         try {
-            // TODO: implement; this currently throws an error
-            const response = await fetch(`${BASE_URL}/${path}`, {
+            console.log(`${BASE_URL}/${path}/${getId(schema, selectedRow)}`);
+            const response = await fetch(`${BASE_URL}/${path}/${getId(schema, selectedRow)}`, {
                 method: 'DELETE',
-                body: JSON.stringify(selectedRow)
             })
-            const data = await response.json();
+            console.log(response);
+
+            const data = await response.text();
 
             console.log('Completed form query!', { data });
             notify('Data deleted!')
