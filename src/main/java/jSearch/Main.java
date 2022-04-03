@@ -1,5 +1,6 @@
 package jSearch;
 
+import com.google.gson.Gson;
 import jSearch.database.DatabaseConnectionHandler;
 import jSearch.models.Message;
 import spark.Request;
@@ -40,8 +41,9 @@ public class Main {
         delete("/applicant/:id", (req, res) -> dbDeleteApplicant(req, res), new JsonTransformer());
 
         // endpoints for CRUD operations
-        // TODO: in progress
-        // post("/insertApplicationMade", (req, res) -> dbInsert(req, res), new JsonTransformer());
+        post("/applicants", (req, res) -> dbInsert(req, res), new JsonTransformer());
+        get("/applicants", (req, res) -> dbApplicants(req, res), new JsonTransformer());
+        put("/update_applicant", (req, res) -> dbUpdateApplicant(req, res), new JsonTransformer());
 
     }
 
@@ -74,6 +76,10 @@ public class Main {
         return dbConn.getPositionsWithSalary(Integer.parseInt(req.params("salary")));
     }
 
+    private static Object dbApplicants(Request req, Response res) {
+        return dbConn.getAllApplicants();
+    }
+
     private static Object dbProjection(Request req, Response res) {
         return dbConn.getFieldFromApplicant(req.params("column"));
     }
@@ -94,10 +100,17 @@ public class Main {
         return dbConn.getJobPositionsAllApplicantsAppliedTo();
     }
 
-    // TODO: in progress
-    // private static Object dbInsert(Request req, Response res) {
-    //     return dbConn.insertApplicationMade();
-    // }
+    private static String dbInsert(Request req, Response res) {
+        Gson gson = new Gson();
+        Applicant app = gson.fromJson(req.body(), Applicant.class);
+        return dbConn.insertApplicant(app);
+    }
+
+    private static String dbUpdateApplicant(Request req, Response res) {
+        Gson gson = new Gson();
+        Applicant app = gson.fromJson(req.body(), Applicant.class);
+        return dbConn.updateApplicant(app);
+    }
 
     public static Object dbGetApplicants(Request req, Response res) {
         return dbConn.getApplicants();
@@ -113,6 +126,14 @@ public class Main {
     private static int testDb() {
         dbConn.close();
         return 0;
+    }
+
+    // note: str should be passed in the form YYYY-MM-DD
+    private static Date parseDate(String str) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        formatter.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+        Date date = formatter.parse(str);
+        return date;
     }
 
 }

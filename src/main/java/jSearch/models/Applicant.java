@@ -3,13 +3,13 @@ package jSearch.models;
 import java.util.UUID;
 
 public class Applicant {
-    UUID applicant_id;
-    String applicant_name;
-    String applicant_phone;
-    String applicant_email;
-    UUID spec_id;
-    UUID supervisor_id;
-    String university_name;
+    public UUID applicant_id;
+    public String applicant_name;
+    public String applicant_phone;
+    public String applicant_email;
+    public UUID spec_id;
+    public UUID supervisor_id;
+    public String university_name;
 
     public Applicant(UUID applicant_id, String applicant_name, String applicant_phone, String applicant_email, UUID spec_id, UUID supervisor_id, String university_name) {
         this.applicant_id = applicant_id;

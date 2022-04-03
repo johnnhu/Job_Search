@@ -3,11 +3,11 @@ package jSearch.models;
 import java.util.UUID;
 
 public class SpecializationInfo {
-    UUID spec_id;
-    String major;
-    String minor;
-    boolean is_honours;
-    String degree_type;
+    public UUID spec_id;
+    public String major;
+    public String minor;
+    public boolean is_honours;
+    public String degree_type;
 
     // constructor for all fields that cannot be NULL
     // TODO: add checks in models for not null

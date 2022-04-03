@@ -1,9 +1,6 @@
 package jSearch.database;
 
-import jSearch.models.Applicant;
-import jSearch.models.JobPositionCompensation;
-import jSearch.models.Message;
-import jSearch.models.SpecializationInfo;
+import jSearch.models.*;
 import javafx.util.Pair;
 
 import java.sql.*;
@@ -68,7 +65,7 @@ public class DatabaseConnectionHandler {
             while (rs.next()) {
                 JobPositionCompensation model = new JobPositionCompensation((java.util.UUID) rs.getObject("company_id"),
                         rs.getString("position_title"),
-                    rs.getInt("salary"));
+                        rs.getInt("salary"));
                 result.add(model);
             }
 
@@ -80,7 +77,6 @@ public class DatabaseConnectionHandler {
 
         return result.toArray(new JobPositionCompensation[result.size()]);
     }
-
 
     // PROJECTION QUERY
     public Object[] getFieldFromApplicant(String columnName) {
@@ -109,7 +105,7 @@ public class DatabaseConnectionHandler {
                 result = getUniversityNameFromApplicant();
                 break;
             default:
-                result = new Object[]{columnName + " is an invalid column name."};
+                result = new Object[] { columnName + " is an invalid column name." };
                 break;
         }
 
@@ -242,7 +238,6 @@ public class DatabaseConnectionHandler {
         return result.toArray(new String[result.size()]);
     }
 
-
     // JOIN QUERY
     public SpecializationInfo[] getSpecializationFromApplicant(String applicant_email) {
         ArrayList<SpecializationInfo> result = new ArrayList<>();
@@ -256,9 +251,9 @@ public class DatabaseConnectionHandler {
 
             while (rs.next()) {
                 SpecializationInfo model = new SpecializationInfo(rs.getString("major"),
-                    rs.getString("minor"),
-                    rs.getBoolean("is_honours"),
-                    rs.getString("degree_type"));
+                        rs.getString("minor"),
+                        rs.getBoolean("is_honours"),
+                        rs.getString("degree_type"));
                 result.add(model);
             }
 
@@ -317,7 +312,6 @@ public class DatabaseConnectionHandler {
         return result.toArray(new Pair[result.size()]);
     }
 
-
     // DIVISION QUERY
     public String[] getJobPositionsAllApplicantsAppliedTo() {
         ArrayList<String> result = new ArrayList<>();
@@ -337,12 +331,81 @@ public class DatabaseConnectionHandler {
         return result.toArray(new String[result.size()]);
     }
 
-
-
     // CRUD OPERATIONS
-    // public void insertApplicationMade() {
-        // TODO
-    // }
+    public Applicant[] getAllApplicants() {
+        ArrayList<Applicant> result = new ArrayList<>();
+
+        try {
+            String query = "SELECT * FROM applicant ";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Applicant model = new Applicant((java.util.UUID) rs.getObject("applicant_id"),
+                        rs.getString("applicant_name"),
+                        rs.getString("applicant_phone"),
+                        rs.getString("applicant_email"),
+                        (java.util.UUID) rs.getObject("spec_id"),
+                        (java.util.UUID) rs.getObject("supervisor_id"),
+                        rs.getString("university_name"));
+                result.add(model);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new Applicant[result.size()]);
+    }
+
+    public String insertApplicant(Applicant app) {
+        try {
+            PreparedStatement ps = conn.prepareStatement(
+                    "INSERT INTO applicant(applicant_id, applicant_name, applicant_phone, applicant_email, spec_id, supervisor_id, university_name) "
+                            +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?)");
+            ps.setObject(1, app.applicant_id, java.sql.Types.OTHER);
+            ps.setString(2, app.applicant_name);
+            ps.setString(3, app.applicant_phone);
+            ps.setString(4, app.applicant_email);
+            ps.setObject(5, app.spec_id, java.sql.Types.OTHER);
+            ps.setObject(6, app.supervisor_id, java.sql.Types.OTHER);
+            ps.setString(7, app.university_name);
+
+            int update = ps.executeUpdate();
+            System.out.println("update value: " + update);
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return "Created and saved new entry into table Applicant";
+    }
+
+    public String updateApplicant(Applicant app) {
+        try {
+            PreparedStatement ps = conn.prepareStatement(
+                    "UPDATE applicant SET applicant_id = ?, applicant_name = ?, applicant_phone = ?, applicant_email = ?, spec_id = ?, supervisor_id = ?, university_name = ? WHERE applicant_id = ?");
+            ps.setObject(1, app.applicant_id, java.sql.Types.OTHER);
+            ps.setString(2, app.applicant_name);
+            ps.setString(3, app.applicant_phone);
+            ps.setString(4, app.applicant_email);
+            ps.setObject(5, app.spec_id, java.sql.Types.OTHER);
+            ps.setObject(6, app.supervisor_id, java.sql.Types.OTHER);
+            ps.setString(7, app.university_name);
+            ps.setObject(8, app.applicant_id, java.sql.Types.OTHER);
+
+            int update = ps.executeUpdate();
+            System.out.println("update value: " + update);
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return "Updated entry in table Applicant";
+    }
 
     public Applicant[] getApplicants() {
         List<Applicant> result = new ArrayList<>();
@@ -355,12 +418,12 @@ public class DatabaseConnectionHandler {
 
             while (rs.next()) {
                 Applicant model = new Applicant((java.util.UUID) rs.getObject("applicant_id"),
-                    rs.getString("applicant_name"),
-                    rs.getString("applicant_phone"),
-                    rs.getString("applicant_email"),
-                    (java.util.UUID) rs.getObject("spec_id"),
-                    (java.util.UUID) rs.getObject("supervisor_id"),
-                    rs.getString("university_name"));
+                        rs.getString("applicant_name"),
+                        rs.getString("applicant_phone"),
+                        rs.getString("applicant_email"),
+                        (java.util.UUID) rs.getObject("spec_id"),
+                        (java.util.UUID) rs.getObject("supervisor_id"),
+                        rs.getString("university_name"));
                 result.add(model);
             }
 
