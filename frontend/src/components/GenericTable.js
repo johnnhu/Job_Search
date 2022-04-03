@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { toast } from 'react-toastify';
 import {
     Table,
     // ButtonGroup,
@@ -6,27 +7,44 @@ import {
     Modal
 } from "react-bootstrap"
 import GenericForm from "./GenericForm";
+import { BASE_URL } from '../utils/constants'
 
 const GenericTable = ({
+    path,
     schema,
-    data
 }) => {
-    const [showDelete, setShowDelete] = useState(false);
+    const [data, setData] = useState([]);
+    const [refetch, setRefetch] = useState(0);
+    const [loading, setLoading] = useState(true);
+
+    const [showCreate, setShowCreate] = useState(false);
     const [showUpdate, setShowUpdate] = useState(false);
+    const [showDelete, setShowDelete] = useState(false);
 
     const [selectedRow, setSelectedRow] = useState({});
 
-    const handleCloseDelete = () => setShowDelete(false);
-    const handleShowDelete = () => setShowDelete(true);
+    const notify = (message) => toast(message || 'Task completed!');
+
+    const handleCloseCreate = () => setShowCreate(false);
+    const handleShowCreate = () => setShowCreate(true);
 
     const handleCloseUpdate = () => setShowUpdate(false);
     const handleShowUpdate = () => setShowUpdate(true);
 
-    const { rows } = data;
+    const handleCloseDelete = () => setShowDelete(false);
+    const handleShowDelete = () => setShowDelete(true);
 
-    if (rows === undefined) {
-        return "Loading..."
-    }
+    useEffect(() => {
+        doFetch();
+    }, [])
+
+    useEffect(() => {
+        console.log({ refetch });
+        if (refetch > 0) {
+            doFetch();
+        }
+        setRefetch(0);
+    }, [refetch]);
 
     const parseHeaders = (rows) => {
         if (rows.length === 0) return ['']
@@ -34,25 +52,80 @@ const GenericTable = ({
         return Object.keys(rows[0])
     }
 
+    const doFetch = async () => {
+        setLoading(true);
+
+        try {
+            const data = {
+                rows: [
+                    {
+                        applicantId: "1",
+                        applicantName: "Michael DeMarco",
+                        applicantPhone: "7806809634",
+                        specId: "2",
+                        supervisorId: "3",
+                        universityName: "UBC",
+                    }
+                ]
+            }
+
+            console.log('Did fetch!', { data });
+            notify('Data fetched!');
+
+            setData(data);
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const doRefetch = () => {
+        setRefetch(refetch + 1);
+    }
+
+    const doDelete = async () => {
+        setLoading(true);
+
+        try {
+            // TODO: implement; this currently throws an error
+            const response = await fetch(`${BASE_URL}/${path}`, {
+                method: 'DELETE',
+                body: JSON.stringify(selectedRow)
+            })
+            const data = await response.json();
+
+            console.log('Completed form query!', { data });
+            notify('Data deleted!')
+
+            doRefetch();
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    if (loading) return 'Loading...'
     return (
         <>
             {/* Main table data */}
             <Table striped bordered hover size="sm">
                 <thead>
                     <tr>
-                        {parseHeaders(rows).map((header) => (
+                        {parseHeaders(data.rows).map((header) => (
                             <th key={header}>{header}</th>
                         ))}
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {rows.map((row) => {
+                    {data.rows.map((row, index) => {
                         return (
-                            <tr>
-                                {Object.values(row).map((value) => {
+                            <tr key={index}>
+                                {Object.values(row).map((value, index) => {
                                     return (
-                                        <td>{value}</td>
+                                        <td key={index}>{value}</td>
                                     )
                                 })}
                                 <td>
@@ -71,13 +144,27 @@ const GenericTable = ({
                 </tbody>
             </Table>
 
+            <Button onClick={() => {
+                handleShowCreate()
+            }} variant="success" size="sm">Create new entry</Button>
+
+            {/* Create entry modal */}
+            <Modal show={showCreate} onHide={handleCloseCreate}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Create entry</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <GenericForm path={path} schema={schema} data={{}} handleClose={handleCloseCreate} doRefetch={doRefetch} update={false} />
+                </Modal.Body>
+            </Modal>
+
             {/* Edit entry modal */}
             <Modal show={showUpdate} onHide={handleCloseUpdate}>
                 <Modal.Header closeButton>
                     <Modal.Title>Update entry</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <GenericForm schema={schema} data={selectedRow} />
+                    <GenericForm path={path} schema={schema} data={selectedRow} handleClose={handleCloseUpdate} doRefetch={doRefetch} update={true} />
                 </Modal.Body>
             </Modal>
 
@@ -94,7 +181,10 @@ const GenericTable = ({
                     <Button variant="secondary" onClick={handleCloseDelete}>
                         Close
                     </Button>
-                    <Button variant="danger" onClick={handleCloseDelete}>
+                    <Button variant="danger" onClick={() => {
+                        doDelete()
+                        handleCloseDelete()
+                    }}>
                         Submit
                     </Button>
                 </Modal.Footer>

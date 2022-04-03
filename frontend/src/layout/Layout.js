@@ -8,9 +8,12 @@ const Layout = ({ children, title }) => {
                 <Col><Header /></Col>
             </Row>
             <Row>
-                <h1>{title}</h1>
+                <Col><h1>{title}</h1></Col>
+            </Row>
+            <Row>
                 <Col>{children}</Col>
             </Row>
+            <footer className="custom-footer">Made by Michael DeMarco, Emily Chen, and Jonathan Hu for CPSC 304, 2021W2.</footer>
         </Container>
     )
 }
