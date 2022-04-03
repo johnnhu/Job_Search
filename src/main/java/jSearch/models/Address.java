@@ -1,11 +1,11 @@
 package jSearch.models;
 
 public class Address {
-    String street_address;
-    String postal_code;
-    String city;
-    String region;
-    String country;
+    public String street_address;
+    public String postal_code;
+    public String city;
+    public String region;
+    public String country;
 
     public Address(String street_address, String postal_code, String city, String region, String country) {
         this.street_address = street_address;

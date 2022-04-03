@@ -1,8 +1,17 @@
 package jSearch;
 
+import com.google.gson.Gson;
 import jSearch.database.DatabaseConnectionHandler;
+import jSearch.models.Applicant;
+import jSearch.models.ApplicationMade;
 import spark.Request;
 import spark.Response;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -34,13 +43,17 @@ public class Main {
         get("/division", (req, res) -> dbDivision(req, res), new JsonTransformer());
 
         // endpoints for CRUD operations
-        // TODO: in progress
-        // post("/insertApplicationMade", (req, res) -> dbInsert(req, res), new JsonTransformer());
+        post("/applicants", (req, res) -> dbInsert(req, res), new JsonTransformer());
+        get("/applicants", (req, res) -> dbApplicants(req, res), new JsonTransformer());
 
     }
 
     private static Object dbSelection(Request req, Response res) {
         return dbConn.getPositionsWithSalary(Integer.parseInt(req.params("salary")));
+    }
+
+    private static Object dbApplicants(Request req, Response res) {
+        return dbConn.getAllApplicants();
     }
 
     private static Object dbProjection(Request req, Response res) {
@@ -63,15 +76,24 @@ public class Main {
         return dbConn.getJobPositionsAllApplicantsAppliedTo();
     }
 
-    // TODO: in progress
-    // private static Object dbInsert(Request req, Response res) {
-    //     return dbConn.insertApplicationMade();
-    // }
+    private static String dbInsert(Request req, Response res) {
+        Gson gson = new Gson();
+        Applicant app = gson.fromJson(req.body(), Applicant.class);
+        return dbConn.insertApplicant(app);
+    }
 
 
     private static int testDb() {
         dbConn.close();
         return 0;
+    }
+
+    // note: str should be passed in the form YYYY-MM-DD
+    private static Date parseDate(String str) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        formatter.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+        Date date = formatter.parse(str);
+        return date;
     }
 
 }

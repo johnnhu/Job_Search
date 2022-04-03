@@ -1,9 +1,6 @@
 package jSearch.database;
 
-import jSearch.models.Applicant;
-import jSearch.models.JobPositionBelongsTo;
-import jSearch.models.JobPositionCompensation;
-import jSearch.models.SpecializationInfo;
+import jSearch.models.*;
 import javafx.util.Pair;
 import java.sql.*;
 import java.util.ArrayList;
@@ -340,9 +337,76 @@ public class DatabaseConnectionHandler {
 
 
     // CRUD OPERATIONS
-    // public void insertApplicationMade() {
-        // TODO
-    // }
+    public Applicant[] getAllApplicants() {
+        ArrayList<Applicant> result = new ArrayList<>();
+
+        try {
+            String query = "SELECT * FROM applicant ";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Applicant model = new Applicant((java.util.UUID) rs.getObject("applicant_id"),
+                        rs.getString("applicant_name"),
+                        rs.getString("applicant_phone"),
+                        rs.getString("applicant_email"),
+                        (java.util.UUID) rs.getObject("spec_id"),
+                        (java.util.UUID) rs.getObject("supervisor_id"),
+                        rs.getString("university_name"));
+                result.add(model);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new Applicant[result.size()]);
+    }
+
+    public String insertApplicant(Applicant app) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO applicant(applicant_id, applicant_name, applicant_phone, applicant_email, spec_id, supervisor_id, university_name) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)");
+            ps.setObject(1, app.applicant_id, java.sql.Types.OTHER);
+            ps.setString(2, app.applicant_name);
+            ps.setString(3, app.applicant_phone);
+            ps.setString(4, app.applicant_email);
+            ps.setObject(5, app.spec_id, java.sql.Types.OTHER);
+            ps.setObject(6, app.supervisor_id, java.sql.Types.OTHER);
+            ps.setString(7, app.university_name);
+
+            int update = ps.executeUpdate();
+            System.out.println("update value: " + update);
+
+             ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return "Created and saved new entry into table Applicant";
+    }
+
+    public String insertApplicationMade_notworking(ApplicationMade app) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO application_made(application_id, status_description, resume_version, cover_letter_version, date_of_application, applicant_id, position_id) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)");
+            ps.setObject(1, java.util.UUID.randomUUID(), java.sql.Types.OTHER);
+            ps.setString(2, app.status);
+            ps.setInt(3, app.resume_version);
+            ps.setInt(4, app.cover_letter_version);
+            ps.setString(5, app.date_of_application);
+            ps.setObject(6, app.applicant_id, java.sql.Types.OTHER);
+            ps.setObject(7, app.position_id, java.sql.Types.OTHER);
+
+            int update = ps.executeUpdate();
+            System.out.println("update value: " + update);
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return "Created and saved new entry into table ApplicationMade";
+    }
 
     private void rollbackConnection() {
         try {
