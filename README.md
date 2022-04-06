@@ -59,6 +59,7 @@ While you should be able to just run `mvn clean install`, this happened to me a 
 6. Select postgresql:9.2-1002.jdbc4, i.e., the latest version
 
 ## Running PostgreSQL and setting up the databases (on Mac)
+
 - `brew services start postgres` (or `brew services restart postgres` if the previous postgres process was never terminated)
 - `psql -U postgres -W`, then enter user password
 - `\dt` to view all tables

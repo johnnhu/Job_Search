@@ -2,8 +2,10 @@ package jSearch.database;
 
 import jSearch.models.*;
 import javafx.util.Pair;
+
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class DatabaseConnectionHandler {
@@ -63,7 +65,7 @@ public class DatabaseConnectionHandler {
             while (rs.next()) {
                 JobPositionCompensation model = new JobPositionCompensation((java.util.UUID) rs.getObject("company_id"),
                         rs.getString("position_title"),
-                    rs.getInt("salary"));
+                        rs.getInt("salary"));
                 result.add(model);
             }
 
@@ -75,7 +77,6 @@ public class DatabaseConnectionHandler {
 
         return result.toArray(new JobPositionCompensation[result.size()]);
     }
-
 
     // PROJECTION QUERY
     public Object[] getFieldFromApplicant(String columnName) {
@@ -104,7 +105,7 @@ public class DatabaseConnectionHandler {
                 result = getUniversityNameFromApplicant();
                 break;
             default:
-                result = new Object[]{columnName + " is an invalid column name."};
+                result = new Object[] { columnName + " is an invalid column name." };
                 break;
         }
 
@@ -237,7 +238,6 @@ public class DatabaseConnectionHandler {
         return result.toArray(new String[result.size()]);
     }
 
-
     // JOIN QUERY
     public SpecializationInfo[] getSpecializationFromApplicant(String applicant_email) {
         ArrayList<SpecializationInfo> result = new ArrayList<>();
@@ -251,9 +251,9 @@ public class DatabaseConnectionHandler {
 
             while (rs.next()) {
                 SpecializationInfo model = new SpecializationInfo(rs.getString("major"),
-                    rs.getString("minor"),
-                    rs.getBoolean("is_honours"),
-                    rs.getString("degree_type"));
+                        rs.getString("minor"),
+                        rs.getBoolean("is_honours"),
+                        rs.getString("degree_type"));
                 result.add(model);
             }
 
@@ -265,7 +265,6 @@ public class DatabaseConnectionHandler {
 
         return result.toArray(new SpecializationInfo[result.size()]);
     }
-
 
     // AGGREGATION QUERY
     public Pair[] getNumberDistinctApplicantsAndMinGradYear() {
@@ -288,7 +287,6 @@ public class DatabaseConnectionHandler {
         }
         return result.toArray(new Pair[result.size()]);
     }
-
 
     // NESTED AGGREGATION WITH GROUP BY QUERY
     public Pair[] getNumberApplicantsPerJobPosition() {
@@ -314,7 +312,6 @@ public class DatabaseConnectionHandler {
         return result.toArray(new Pair[result.size()]);
     }
 
-
     // DIVISION QUERY
     public String[] getJobPositionsAllApplicantsAppliedTo() {
         ArrayList<String> result = new ArrayList<>();
@@ -333,8 +330,6 @@ public class DatabaseConnectionHandler {
         }
         return result.toArray(new String[result.size()]);
     }
-
-
 
     // CRUD OPERATIONS
     public Applicant[] getAllApplicants() {
@@ -365,10 +360,12 @@ public class DatabaseConnectionHandler {
         return result.toArray(new Applicant[result.size()]);
     }
 
-    public String insertApplicant(Applicant app) {
+    public Message insertApplicant(Applicant app) {
         try {
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO applicant(applicant_id, applicant_name, applicant_phone, applicant_email, spec_id, supervisor_id, university_name) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement ps = conn.prepareStatement(
+                    "INSERT INTO applicant(applicant_id, applicant_name, applicant_phone, applicant_email, spec_id, supervisor_id, university_name) "
+                            +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?)");
             ps.setObject(1, app.applicant_id, java.sql.Types.OTHER);
             ps.setString(2, app.applicant_name);
             ps.setString(3, app.applicant_phone);
@@ -380,16 +377,18 @@ public class DatabaseConnectionHandler {
             int update = ps.executeUpdate();
             System.out.println("update value: " + update);
 
-             ps.close();
+            ps.close();
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
-        return "Created and saved new entry into table Applicant";
+
+        return new Message("OK");
     }
 
-    public String updateApplicant(Applicant app) {
+    public Message updateApplicant(Applicant app) {
         try {
-            PreparedStatement ps = conn.prepareStatement("UPDATE applicant SET applicant_id = ?, applicant_name = ?, applicant_phone = ?, applicant_email = ?, spec_id = ?, supervisor_id = ?, university_name = ? WHERE applicant_id = ?");
+            PreparedStatement ps = conn.prepareStatement(
+                    "UPDATE applicant SET applicant_id = ?, applicant_name = ?, applicant_phone = ?, applicant_email = ?, spec_id = ?, supervisor_id = ?, university_name = ? WHERE applicant_id = ?");
             ps.setObject(1, app.applicant_id, java.sql.Types.OTHER);
             ps.setString(2, app.applicant_name);
             ps.setString(3, app.applicant_phone);
@@ -402,11 +401,63 @@ public class DatabaseConnectionHandler {
             int update = ps.executeUpdate();
             System.out.println("update value: " + update);
 
-             ps.close();
+            ps.close();
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
-        return "Updated entry in table Applicant";
+        return new Message("OK");
+    }
+
+    public Applicant[] getApplicants() {
+        List<Applicant> result = new ArrayList<>();
+
+        try {
+            String query = "SELECT * FROM applicant";
+            PreparedStatement ps = conn.prepareStatement(query);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Applicant model = new Applicant((java.util.UUID) rs.getObject("applicant_id"),
+                        rs.getString("applicant_name"),
+                        rs.getString("applicant_phone"),
+                        rs.getString("applicant_email"),
+                        (java.util.UUID) rs.getObject("spec_id"),
+                        (java.util.UUID) rs.getObject("supervisor_id"),
+                        rs.getString("university_name"));
+                result.add(model);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new Applicant[result.size()]);
+    }
+
+    public Message deleteApplicant(String id) {
+        try {
+            UUID id2 = UUID.fromString(id);
+
+            System.out.println(id2);
+
+            String query = "DELETE FROM applicant WHERE applicant_id = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setObject(1, id2, java.sql.Types.OTHER);
+
+            System.out.println(ps);
+
+            int rs = ps.executeUpdate();
+            System.out.println(rs);
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return new Message("OK");
     }
 
     private void rollbackConnection() {
