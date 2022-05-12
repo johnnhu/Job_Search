@@ -2,7 +2,7 @@
 
 An application to help prospective interns track job applications. Envisioned as an alternative to existing software solutions like the UBC Science Co-op website.
 
-This project was done by three students, and I was in charge of writing the backend logic for the complex queries such as nested aggregation, and building endpoints using RESTFUL design principles. 
+This project was done by three students, and I was in charge of **writing the backend logic for the complex queries such as nested aggregation**, and **building endpoints using RESTFUL design principles**. 
 
 ## Setup
 
